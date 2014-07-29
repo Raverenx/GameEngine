@@ -1,0 +1,550 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Experimental.Collections</name>
+    </assembly>
+    <members>
+        <member name="T:System.Collections.Generic.IMultiDictionary`2">
+            <summary>
+            An IMultiDictionary is an interface describing the methods to be
+            implemented by the MultiDictionary collection class. 
+            
+            A MultiDictionary can be viewed as a <see cref="T:System.Collections.IDictionary"/> that allows multiple 
+            values for any given unique key. While the MultiDictionary API is 
+            mostly the same as that of a regular <see cref="T:System.Collections.IDictionary"/>, there is a distinction
+            in that getting the value for a key returns a <see cref="T:System.Collections.Generic.ICollection`1"/> of values
+            rather than a single value associated with that key. Additionally, 
+            there is functionality to allow adding or removing more than a single
+            value at once. 
+            
+            The MultiDictionary can also be viewed as a <see cref="T:System.Collections.IDictionary">IDictionary&lt;TKey,ICollection&lt;TValue&gt;t&gt;</see>
+            where the <see cref="T:System.Collections.Generic.ICollection`1"/> is abstracted from the view of the programmer using
+            the MultiDictionary. However, the MultiDictionary is distinct from the 
+            <see cref="T:System.Collections.IDictionary">IDictionary&lt;TKey,ICollection&lt;TValue&gt;t&gt;</see> in that the MultiDictionary treats every
+            item within the <see cref="T:System.Collections.Generic.ICollection`1"/> as a member of its own key-value pair. This 
+            distinction allows for iteration over the key-value pairs, rather than 
+            over KeyValuePair&lt;TKey,ICollection&lt;TValue&gt;t&gt;, and also affects the size(), contains(), 
+            and setter methods, as well as the Values Property. More specific descriptions 
+            are included with each method/Property.
+            </summary>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+        </member>
+        <member name="M:System.Collections.Generic.IMultiDictionary`2.Add(`0,`1)">
+            <summary>
+            Adds the specified key and value to the MultiDictionary.
+            </summary>
+            <param name="key">The key of the entry to add.</param>
+            <param name="value">The value of the entry to add.</param>
+            <remarks>
+            Unlike the Add for Dictionary, the MultiDictionary Add will not
+            throw any exceptions. If the given key is already in the MultiDictionary,
+            then value will be added to that keys associated values collection.
+            </remarks>
+        </member>
+        <member name="M:System.Collections.Generic.IMultiDictionary`2.AddRange(`0,System.Collections.Generic.IEnumerable{`1})">
+            <summary>
+            Adds a number of key-value pairs to this MultiDictionary, where
+            the key for each value is the key param, and the value for a pair
+            is an element from "values"
+            </summary>
+            <param name="key">The key of all entries to add</param>
+            <param name="values">An IEnumerable of values to add</param>
+        </member>
+        <member name="M:System.Collections.Generic.IMultiDictionary`2.Remove(`0)">
+            <summary>
+            Removes all values associated with the given key from the MultiDictionary
+            </summary>
+            <param name="key">The key of the items to be removed</param>
+            <returns>True if the removal was successful, false otherwise</returns>
+        </member>
+        <member name="M:System.Collections.Generic.IMultiDictionary`2.RemoveItem(`0,`1)">
+            <summary>
+            Removes the first instance (if any) of the given key-value pair from the MultiDictionary. 
+            If the item being removed is the last one associated with its key, that key will be removed 
+            from the dictionary and its associated values collection will be freed as if a call to Remove(key)
+            had been made.
+            </summary>
+            <param name="key">The key of the item to remove</param>
+            <param name="value">The value of the item to remove</param>
+            <returns>True if the removal was successful, false otherwise</returns>
+        </member>
+        <member name="M:System.Collections.Generic.IMultiDictionary`2.Contains(`0,`1)">
+            <summary>
+            Determines if the given key-value pair exists within the MultiDictionary
+            </summary>
+            <param name="key">The key to check for</param>
+            <param name="value">The value to check for</param>
+            <returns>True if the MultiDictionary contains the requested pair, false otherwise</returns>
+        </member>
+        <member name="M:System.Collections.Generic.IMultiDictionary`2.ContainsKey(`0)">
+            <summary>
+            Determines if the given key exists within this MultiDictionary and has
+            at least one value associated with it.
+            </summary>
+            <param name="key">The key to search the dictionary for</param>
+            <returns>True if the MultiDictionary contains the requested key, false otherwise</returns>
+        </member>
+        <member name="M:System.Collections.Generic.IMultiDictionary`2.ContainsValue(`1)">
+            <summary>
+            Determines if the given value exists within the MultiDictionary
+            </summary>
+            <param name="value">A value to search the MultiDictionary for</param>
+            <returns>True if the MultiDictionary contains the requested value, false otherwise</returns>
+        </member>
+        <member name="M:System.Collections.Generic.IMultiDictionary`2.ToDictionary">
+            <summary>
+            Returns an IDictionary&lt;TKey, ICollection&lt;TValue&gt;&gt; that is a copy of the one
+            inside of this MultiDictionary. Changes to the returned IDictionary&lt;TKey, ICollection&lt;TValue&gt;&gt; will not
+            affect this MultiDictionary. 
+            </summary>
+            <returns>An IDictionary&lt;TKey, ICollection&lt;TValue&gt;&gt; copy of the one inside of the MultiDictionary</returns>
+        </member>
+        <member name="P:System.Collections.Generic.IMultiDictionary`2.Values">
+            <summary>
+            Gets a collection of all of the individual values in this MultiDictionary
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.IMultiDictionary`2.Keys">
+            <summary>
+            Gets a collection of all of the individual keys. Will only return keys that
+            have one or more associated values.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.IMultiDictionary`2.Item(`0)">
+            <summary>
+            Get all values associated with the given key. If there are not
+            currently any values associated with the key, then an empty <see cref="T:System.Collections.Generic.ICollection`1"/>
+            is created for that key and returned.
+            </summary>
+            <param name="key">The key to get all values for</param>
+            <returns>A collection of values that are associated with the given key</returns>
+            <remarks>
+            Note that the collection returned will change alongside any changes to the multiDictionary (and vice-versa)
+            </remarks>
+        </member>
+        <member name="T:System.Collections.Generic.MultiDictionary`2">
+            <summary>
+            An implementation of a multiple value Dictionary; see
+            <seealso cref="T:System.Collections.Generic.IMultiDictionary`2"/>
+            </summary>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+        </member>
+        <member name="F:System.Collections.Generic.MultiDictionary`2.dictionary">
+            <summary>
+            The private dictionary that this class effectively wraps around
+            </summary>
+        </member>
+        <member name="F:System.Collections.Generic.MultiDictionary`2.count">
+            <summary>
+            The number of key-value pairs currently in the MultiDictionary
+            </summary>
+        </member>
+        <member name="F:System.Collections.Generic.MultiDictionary`2.version">
+            <summary>
+            The current version of this MultiDictionary used to determine MultiDictionary modification
+            during enumeration
+            </summary>
+        </member>
+        <member name="F:System.Collections.Generic.MultiDictionary`2.values">
+            <summary>
+            A ValueCollection to return from the Values property
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Collections.Generic.MultiDictionary`2"/> class 
+            that is empty, has the default initial capacity, and uses the default 
+            <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>. for the key type
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Collections.Generic.MultiDictionary`2"/> class that is 
+            empty, has the specified initial capacity, and uses the default <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>. for the key type.
+            </summary>
+            <param name="capacity">Initial number of keys that the MultiDictionary will allocate space for</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Capacity must be &gt;= 0</exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.#ctor(System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Collections.Generic.MultiDictionary`2"/> class 
+            that is empty, has the default initial capacity, and uses the 
+            specified <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>.
+            </summary>
+            <param name="comparer">Specified comparer to use for the keys</param>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.#ctor(System.Int32,System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Collections.Generic.MultiDictionary`2"/> class 
+            that is empty, has the specified initial capacity, and uses the 
+            specified <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>.
+            </summary>
+            <param name="capacity">Initial number of keys that the MultiDictionary will allocate space for</param>
+            <param name="comparer">Specified comparer to use for the keys</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Capacity must be &gt;= 0</exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{`0,`1}})">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Collections.Generic.MultiDictionary`2"/> class that contains 
+            elements copied from the specified IEnumerable&lt;KeyValuePair&lt;TKey, TValue&gt;&gt; and uses the 
+            default <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>. for the key type.
+            </summary>
+            <param name="enumerable">IEnumerable to copy elements into this from</param>
+            <exception cref="T:System.ArgumentNullException">enumerable must be non-null</exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{`0,`1}},System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Collections.Generic.MultiDictionary`2"/> class that contains 
+            elements copied from the specified IEnumerable&lt;KeyValuePair&lt;TKey, TValue&gt;&gt; and uses the 
+            specified <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>..
+            </summary>
+            <param name="enumerable">IEnumerable to copy elements into this from</param>
+            <param name="comparer">Specified comparer to use for the keys</param>
+            <exception cref="T:System.ArgumentNullException">enumerable must be non-null</exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Add(`0,`1)">
+            <summary>
+            Adds the specified key and value to the MultiDictionary.
+            </summary>
+            <param name="key">The key of the entry to add.</param>
+            <param name="value">The value of the entry to add.</param>
+            <remarks>
+            Unlike the Add for <see cref="T:System.Collections.IDictionary"/>, the MultiDictionary Add will not
+            throw any exceptions. If the given key is already in the MultiDictionary,
+            then value will be added to that keys associated values collection.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">key must be non-null</exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.AddRange(`0,System.Collections.Generic.IEnumerable{`1})">
+            <summary>
+            Adds a number of key-value pairs to this MultiDictionary, where
+            the key for each value is the key param, and the value for a pair
+            is an element from "values"
+            </summary>
+            <param name="key">The key of all entries to add</param>
+            <param name="values">An IEnumerable of values to add</param>
+            <exception cref="T:System.ArgumentNullException">key must be non-null</exception>
+            <exception cref="T:System.ArgumentNullException">values must be non-null</exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Remove(`0)">
+            <summary>
+            Removes all values associated with the given key from the MultiDictionary
+            </summary>
+            <param name="key">The key of the items to be removed</param>
+            <returns>True if the removal was successful, false otherwise</returns>
+            <exception cref="T:System.ArgumentNullException">key must be non-null</exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.RemoveItem(`0,`1)">
+            <summary>
+            Removes the first instance (if any) of the given key-value pair from the MultiDictionary. 
+            If the item being removed is the last one associated with its key, that key will be removed 
+            from the dictionary and its associated values collection will be freed as if a call to Remove(key)
+            had been made.
+            </summary>
+            <param name="key">The key of the item to remove</param>
+            <param name="value">The value of the item to remove</param>
+            <returns>True if the removal was successful, false otherwise</returns>
+            <exception cref="T:System.ArgumentNullException">key must be non-null</exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Contains(`0,`1)">
+            <summary>
+            Determines if the given key-value pair exists within the MultiDictionary
+            </summary>
+            <param name="key">The key to check for</param>
+            <param name="value">The value to check for</param>
+            <returns>True if the MultiDictionary contains the requested pair, false otherwise</returns>
+            <exception cref="T:System.ArgumentNullException">key must be non-null</exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.ContainsKey(`0)">
+            <summary>
+            Determines if the given key exists within this MultiDictionary and has
+            at least one value associated with it.
+            </summary>
+            <param name="key">The key to search the MultiDictionary for</param>
+            <returns>True if the MultiDictionary contains the requested key, false otherwise</returns>
+            <exception cref="T:System.ArgumentNullException">key must be non-null</exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.ContainsValue(`1)">
+            <summary>
+            Determines if the given value exists within the MultiDictionary
+            </summary>
+            <param name="value">A value to search the MultiDictionary for</param>
+            <returns>True if the MultiDictionary contains the requested value, false otherwise</returns>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.ToDictionary">
+            <summary>
+            Returns an <see cref="T:System.Collections.IDictionary">IDictionary&lt;TKey,ICollection&lt;TValue&gt;t&gt;</see> that is a copy of the one
+            inside of this MultiDictionary. Changes to the returned <see cref="T:System.Collections.IDictionary">IDictionary&lt;TKey,ICollection&lt;TValue&gt;t&gt;</see> will not
+            affect this MultiDictionary. 
+            </summary>
+            <returns>An IDictionary that copies the one inside of the MultiDictionary</returns>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Add(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Adds the specified KeyValuePair to the MultiDictionary.
+            </summary>
+            <param name="item">KeyValuePair to add to this MultiDictionary.</param>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Clear">
+            <summary>
+            Removes all keys and values from this MultiDictionary
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Contains(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Determines if the given KeyValuePair exists in this MultiDictionary
+            </summary>
+            <param name="item">KeyValuePair to search the MultiDictionary for</param>
+            <returns>True if the pair is in this MultiDictionary, false otherwise</returns>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.CopyTo(System.Collections.Generic.KeyValuePair{`0,`1}[],System.Int32)">
+            <summary>
+            Copies all of the KeyValuePair items in this MultiDictionary into <paramref name="array"/> 
+            starting at <paramref name="arrayIndex"/>
+            </summary>
+            <param name="array"></param>
+            <param name="arrayIndex"></param>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Remove(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Removes the first instance (if any) of the given KeyValuePair from the MultiDictionary. 
+            If the item being removed is the last one associated with its key, that key will be removed 
+            from the MultiDictionary and its associated values collection will be freed as if a call to Remove(item.key)
+            had been made.
+            </summary>
+            <param name="item">The KeyValuePair to remove from this MultiDictionary</param>
+            <returns>True if the removal was successful, false otherwise</returns>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.GetEnumerator">
+            <summary>
+            Get an <see cref="T:System.Collections.IEnumerator"/> that enumerates over <see cref="T:System.Collections.Generic.KeyValuePair`2"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.NewCollection(System.Collections.Generic.IEnumerable{`1})">
+            <summary>
+            Protected Factory Method to create a new, empty instance of the ICollection that
+            this MultiDictionary uses in its internal Dictionary
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.MultiDictionary`2.Values">
+            <summary>
+            Gets a collection of all of the individual values in this MultiDictionary
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.MultiDictionary`2.Keys">
+            <summary>
+            Gets a collection of all of the individual keys. Will only return keys that
+            have one or more associated values.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.MultiDictionary`2.Item(`0)">
+            <summary>
+            Get all values associated with the given key. If there are not
+            currently any values associated with the key, then an empty <see cref="T:System.Collections.Generic.ICollection`1"/>
+            is created for that key and returned.
+            </summary>
+            <param name="key">The key to get all values for</param>
+            <returns>A collection of values that are associated with the given key</returns>
+            <remarks>
+            Note that the collection returned will change alongside any changes to the multiDictionary (and vice-versa)
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">key must be non-null</exception>
+        </member>
+        <member name="P:System.Collections.Generic.MultiDictionary`2.Count">
+            <summary>
+            The number of KeyValuePairs in this MultiDictionary
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.MultiDictionary`2.IsReadOnly">
+            <summary>
+            True if the MultiDictionary is read only, false otherwise.
+            </summary>
+        </member>
+        <member name="T:System.Collections.Generic.MultiDictionary`2.Enumerator">
+            <summary>
+            An enumerator for the key-value pairs of a MultiDictionary
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Enumerator.#ctor(System.Collections.Generic.MultiDictionary{`0,`1})">
+            <summary>
+            Constructor for the enumerator struct
+            </summary>
+            <param name="multiDictionary">A MultiDictionary to iterate over</param>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Enumerator.MoveNext">
+            <summary>
+            Advances the enumerator to the next element of the collection.
+            </summary>
+            <returns>
+            true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created. </exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Enumerator.MoveNextKey">
+            <summary>
+            Private method to move forward to the next key within the IDictionary&lt;TKey, ICollection&lt;TValue&gt;&gt;
+            </summary>
+            <returns>true if the enumerator was successfully advanced to the next key; 
+            false if the enumerator has passed the end of the collection. 
+            </returns>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Enumerator.Reset">
+            <summary>
+            Sets the enumerator to its initial position, which is before the first element in the collection.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created. </exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Enumerator.Dispose">
+            <summary>
+            Frees resources associated with this Enumerator
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.Enumerator.Finalize">
+            <summary>
+            Finalizer to call Dispose on this enumerator
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.MultiDictionary`2.Enumerator.Current">
+            <summary>
+            Gets the current element.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.MultiDictionary`2.Enumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            Gets the current element.
+            </summary>
+        </member>
+        <member name="T:System.Collections.Generic.MultiDictionary`2.InnerCollectionView">
+            <summary>
+            An inner class that functions as a view of a ICollection within a MultiDictionary
+            </summary>
+        </member>
+        <member name="T:System.Collections.Generic.MultiDictionary`2.ValueCollection">
+            <summary>
+            The collection type returned by MultiDictionary.Values. Functions mostly as an enumerator wrapper for the values
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.ValueCollection.#ctor(System.Collections.Generic.MultiDictionary{`0,`1})">
+            <summary>
+            Takes in a MultiDictionary to iterate over
+            </summary>
+            <param name="multiDictionary">a MultiDictionary to iterate over</param>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.ValueCollection.Remove(`1)">
+            <summary>
+            Remove() is an unsupported method on a ReadOnly Collection.
+            </summary>
+            <exception cref="T:System.NotSupportedException">The collection was modified after the enumerator was created. </exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.ValueCollection.Add(`1)">
+            <summary>
+            Add() is an unsupported method on a ReadOnly Collection.
+            </summary>
+            <exception cref="T:System.NotSupportedException">The collection was modified after the enumerator was created. </exception>
+        </member>
+        <member name="M:System.Collections.Generic.MultiDictionary`2.ValueCollection.Clear">
+            <summary>
+            Clear() is an unsupported method on a ReadOnly Collection.
+            </summary>
+            <exception cref="T:System.NotSupportedException">The collection was modified after the enumerator was created. </exception>
+        </member>
+        <member name="T:System.Collections.Generic.Exceptions">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.Exceptions.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.Exceptions.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.Exceptions.CopyTo_ArgumentsTooSmall">
+            <summary>
+              Looks up a localized string similar to Destination array is not long enough to copy all the items in the collection. Check array index and length..
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.Exceptions.Enumerator_Modification">
+            <summary>
+              Looks up a localized string similar to Collection was modified; enumeration operation may not execute.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.Exceptions.ReadOnly_Modification">
+            <summary>
+              Looks up a localized string similar to The collection is read-only.
+            </summary>
+        </member>
+        <member name="T:Validation.Requires">
+            <summary>
+            Common runtime checks that throw ArgumentExceptions upon failure.
+            </summary>
+        </member>
+        <member name="M:Validation.Requires.NotNull``1(``0,System.String)">
+            <summary>
+            Throws an exception if the specified parameter's value is null.
+            </summary>
+            <typeparam name="T">The type of the parameter.</typeparam>
+            <param name="value">The value of the argument.</param>
+            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+            <returns>The value of the parameter.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
+        </member>
+        <member name="M:Validation.Requires.NotNull(System.IntPtr,System.String)">
+            <summary>
+            Throws an exception if the specified parameter's value is IntPtr.Zero.
+            </summary>
+            <param name="value">The value of the argument.</param>
+            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+            <returns>The value of the parameter.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
+        </member>
+        <member name="M:Validation.Requires.NotNullAllowStructs``1(``0,System.String)">
+            <summary>
+            Throws an exception if the specified parameter's value is null.
+            </summary>
+            <typeparam name="T">The type of the parameter.</typeparam>
+            <param name="value">The value of the argument.</param>
+            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+            <returns>The value of the parameter.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
+            <remarks>
+            This method exists for callers who themselves only know the type as a generic parameter which
+            may or may not be a class, but certainly cannot be null.
+            </remarks>
+        </member>
+        <member name="M:Validation.Requires.Range(System.Boolean,System.String,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
+            </summary>
+        </member>
+        <member name="M:Validation.Requires.FailRange(System.String,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
+            </summary>
+            <returns>Nothing.  This method always throws.</returns>
+        </member>
+        <member name="M:Validation.Requires.Argument(System.Boolean,System.String,System.String)">
+            <summary>
+            Throws an ArgumentException if a condition does not evaluate to true.
+            </summary>
+        </member>
+        <member name="M:Validation.Requires.Argument(System.Boolean)">
+            <summary>
+            Throws an ArgumentException if a condition does not evaluate to true.
+            </summary>
+        </member>
+        <member name="T:Validation.ValidatedNotNullAttribute">
+            <summary>
+            Indicates to Code Analysis that a method validates a particular parameter.
+            </summary>
+        </member>
+    </members>
+</doc>
