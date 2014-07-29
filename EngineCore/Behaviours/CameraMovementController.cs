@@ -72,8 +72,13 @@ namespace EngineCore.Behaviours
             }
             if (movementDirection != Vector3.Zero)
             {
-                this.Transform.Position += Vector3.Normalize(movementDirection) *  (InputSystem.GetKey(Keys.LShiftKey) ? 1.8f : 0.5f);
+                this.Transform.Position += Vector3.Normalize(movementDirection) *  GetCameraSpeed() * Time.DeltaTime;
             }
+        }
+
+        private float GetCameraSpeed()
+        {
+            return InputSystem.GetKey(Keys.Shift) ? 50.0f : 25.0f;
         }
     }
 }

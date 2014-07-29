@@ -107,6 +107,7 @@
     <Compile Include="Components\Transform.cs" />
     <Compile Include="Input\InputSystem.cs" />
     <Compile Include="Physics\Collider.cs" />
+    <Compile Include="Time.cs" />
     <Compile Include="Utility\Convert.cs" />
     <Compile Include="Entities\BoxRenderer.cs" />
     <Compile Include="GameObject.cs" />

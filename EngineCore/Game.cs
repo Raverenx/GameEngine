@@ -41,6 +41,7 @@ namespace EngineCore
 
         public Game()
         {
+            this.previousFrameStartTime = DateTime.UtcNow;
             this.Systems = new GameSystemCollection();
             this.Systems.Add(new EntityUpdateSystem(this));
             this.Systems.Add(new BepuPhysicsSystem(this));
@@ -60,6 +61,8 @@ namespace EngineCore
 
         private void AddStartingStuff()
         {
+            graphicsSystem.Renderer.Light = new DirectionalLight(graphicsSystem.Renderer.Device, graphicsSystem.Renderer.DeviceContext, new Vector3(0.1f, -.3f, 1.0f), new Color4f(1,1,1,1));
+
             var camera = new GameObject();
             camera.Transform.Position = new Vector3(0, 5, -5);
             camera.AddComponent<Camera>();
@@ -117,9 +120,13 @@ namespace EngineCore
             Debug.WriteLine("Exiting");
         }
 
+        private DateTime previousFrameStartTime;
         private void RunSingleFrame()
         {
             DateTime beforeFrameTime = DateTime.UtcNow;
+            float elapsedSinceLastFrame = (float)(beforeFrameTime - previousFrameStartTime).TotalSeconds;
+            Time.SetDeltaTime(elapsedSinceLastFrame);
+            previousFrameStartTime = beforeFrameTime;
             foreach (GameSystem system in this.Systems)
             {
                 system.Update();
