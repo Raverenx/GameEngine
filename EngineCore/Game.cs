@@ -25,7 +25,7 @@ namespace EngineCore
         {
             get { return gameObjects; }
         }
-        public void AddGameObject(GameObject go)
+        private void AddGameObject(GameObject go)
         {
             this.gameObjects.Add(go);
             OnGameObjectAdded(go);
@@ -48,6 +48,8 @@ namespace EngineCore
             graphicsSystem = new SharpDxGraphicsSystem(this);
             this.Systems.Add(graphicsSystem);
             this.Systems.Add(new InputSystem(this));
+
+            GameObject.GameObjectConstructed += AddGameObject;
         }
 
         public void Start()
@@ -67,40 +69,31 @@ namespace EngineCore
             camera.Transform.Position = new Vector3(0, 5, -5);
             camera.AddComponent<Camera>();
             camera.AddComponent<CameraMovementController>();
-            this.AddGameObject(camera);
 
             var box = GameObject.CreateBox(this.GraphicsSystem.Renderer, 3.0f, 3.0f, 3.0f);
             box.Transform.Position = new Vector3(0, 5, 15);
-            this.AddGameObject(box);
 
             var box2 = GameObject.CreateBox(this.GraphicsSystem.Renderer, 3.0f, 1.0f, 3.0f, 2.0f);
             box2.Transform.Position = new Vector3(1.5f, 10, 15);
-            this.AddGameObject(box2);
 
             var box3 = GameObject.CreateBox(this.GraphicsSystem.Renderer, 18.0f, 0.33f, 0.5f, 1.0f);
             box3.Transform.Position = new Vector3(0, 18, 15.5f);
-            this.AddGameObject(box3);
 
             box = GameObject.CreateBox(this.GraphicsSystem.Renderer, 2.0f, .15f, 2.0f, 0.3331f);
             box.Transform.Position = new Vector3(-6.5f, 19, 15.5f);
-            this.AddGameObject(box);
 
             box = GameObject.CreateBox(this.GraphicsSystem.Renderer, 0.5f, 0.5f, 0.5f, 0.01f);
             box.Transform.Position = new Vector3(6.5f, 32, 15.5f);
-            this.AddGameObject(box);
 
             box = GameObject.CreateBox(this.GraphicsSystem.Renderer, 1.0f, 1.0f, 1.0f);
             box.Transform.Position = new Vector3(4, 5, -10);
-            this.AddGameObject(box);
             box.GetComponent<Collider>().PhysicsEntity.LinearVelocity = new BEPUutilities.Vector3(0, 2, 15);
 
             box = GameObject.CreateBox(this.GraphicsSystem.Renderer, 1.0f, 1.0f, 1.0f);
             box.Transform.Position = new Vector3(4.9f, 5, 30);
-            this.AddGameObject(box);
             box.GetComponent<Collider>().PhysicsEntity.LinearVelocity = new BEPUutilities.Vector3(0, 2, -15);
 
             var floor = GameObject.CreateStaticBox(this.GraphicsSystem.Renderer, 50.0f, 1.0f, 50.0f);
-            this.AddGameObject(floor);
         }
 
         private void StartSystems()

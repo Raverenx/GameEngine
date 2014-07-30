@@ -62,7 +62,6 @@ namespace EngineCore.Graphics
             GameObject box  = GameObject.CreateBox(this.renderer, 0.2f, 0.2f, 0.2f, .2f);
             box.GetComponent<Collider>().PhysicsEntity.LinearVelocity = (renderer.MainCamera.Forward * 25.0f).ToBepuVector();
             box.Transform.Position = renderer.MainCamera.Position + renderer.MainCamera.Forward * 1.5f;
-            Game.AddGameObject(box);
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)

@@ -42,13 +42,13 @@ namespace EngineCore.Physics
         {
             this.Transform.PositionChanged += OnTransformPositionManuallyChanged;
             this.Transform.RotationChanged += OnTransformRotationManuallyChanged;
-            OnTransformPositionManuallyChanged(this.Transform.Position);
-            OnTransformRotationManuallyChanged(this.Transform.Rotation);
 
             this.system = system;
             if (this.physicsEntity != null)
             {
                 system.AddEntity(this.physicsEntity);
+                OnTransformPositionManuallyChanged(this.Transform.Position);
+                OnTransformRotationManuallyChanged(this.Transform.Rotation);
             }
         }
 

@@ -15,19 +15,24 @@ using EngineCore.Physics;
 
 namespace EngineCore
 {
-    public class GameObject : IUpdateableEntity
+    public class GameObject
     {
-        // Hold a back-reference to the game until i figure out how to encapsulate things
+        // Hold a back-reference to the game until I figure out how to encapsulate things
         Game game;
 
         MultiDictionary<Type, Component> components = new MultiDictionary<Type, Component>();
 
         public GameObject()
         {
-            Transform transform = new Transform();
-            this.AddComponent<Transform>();
-            this.Transform = transform;
+            this.Transform = AddComponent<Transform>();
+
+            if (GameObjectConstructed != null)
+            {
+                GameObjectConstructed(this);
+            }
         }
+
+        public static event Action<GameObject> GameObjectConstructed;
 
         public Transform Transform { get; private set; }
 
@@ -45,11 +50,6 @@ namespace EngineCore
                 InitializeSingleComponent(this.game, component);
             }
             return component;
-        }
-
-        public void Update()
-        {
-
         }
 
         public void InitializeComponents(Game game)
