@@ -27,7 +27,7 @@ namespace EngineCore.Physics
 
         public override void Update()
         {
-            space.Update();
+            space.Update(Time.DeltaTime);
         }
 
         public void AddEntity(Entity entity)

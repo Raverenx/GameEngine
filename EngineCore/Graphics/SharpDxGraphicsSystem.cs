@@ -67,7 +67,6 @@ namespace EngineCore.Graphics
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            Debug.WriteLine("Pressed " + e.KeyCode);
             if (e.KeyCode == Keys.F)
             {
                 FireBoxForward();

@@ -32,6 +32,7 @@ namespace EngineCore.Input
         }
 
         public static Vector2 MousePosition { get; private set; }
+        public static float MouseWheelDelta { get; private set; }
 
         private RenderForm gameWindow;
 
@@ -49,6 +50,12 @@ namespace EngineCore.Input
             gameWindow.MouseMove += OnMouseMoved;
             gameWindow.KeyDown += OnKeyDown;
             gameWindow.KeyUp += OnKeyUp;
+            gameWindow.MouseWheel += OnMouseWheel;
+        }
+
+        private void OnMouseWheel(object sender, MouseEventArgs e)
+        {
+            MouseWheelDelta = e.Delta;
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e)
@@ -91,6 +98,7 @@ namespace EngineCore.Input
         {
             newKeysDownThisFrame.Clear();
             newMouseButtonsDownThisFrame.Clear();
+            MouseWheelDelta = 0f;
         }
     }
 }

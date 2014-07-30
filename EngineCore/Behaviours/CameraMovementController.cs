@@ -17,6 +17,7 @@ namespace EngineCore.Behaviours
 
         float currentYaw;
         float currentPitch;
+        private float scrollMovementSpeed = 1.0f;
 
         protected override void Update()
         {
@@ -28,15 +29,32 @@ namespace EngineCore.Behaviours
         {
             float newMouseX = InputSystem.MousePosition.X;
             float newMouseY = InputSystem.MousePosition.Y;
-            if (InputSystem.GetMouseButton(MouseButtons.Left))
-            {
-                float xDelta = newMouseX - previousMouseX;
-                float yDelta = newMouseY - previousMouseY;
 
+            float xDelta = newMouseX - previousMouseX;
+            float yDelta = newMouseY - previousMouseY;
+
+            if (InputSystem.GetMouseButton(MouseButtons.Left) || InputSystem.GetMouseButton(MouseButtons.Right))
+            {
                 currentYaw += -xDelta * 0.01f;
                 currentPitch += yDelta * 0.01f;
 
-                this.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(currentYaw,currentPitch, 0f);
+                this.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(currentYaw, currentPitch, 0f);
+            }
+
+            if (InputSystem.GetMouseButton(MouseButtons.Middle))
+            {
+                Vector3 movementDirection = this.Transform.Right * xDelta + this.Transform.Up * yDelta;
+                if (movementDirection != Vector3.Zero)
+                {
+                    this.Transform.Position += Vector3.Normalize(movementDirection) * GetCameraSpeed() * Time.DeltaTime;
+                }
+            }
+
+            float wheelDelta = InputSystem.MouseWheelDelta;
+            if (wheelDelta != 0f)
+            {
+                Vector3 movement = this.Transform.Forward * wheelDelta * scrollMovementSpeed;
+                this.Transform.Position +=  movement * Time.DeltaTime;
             }
 
             this.previousMouseX = newMouseX;
@@ -72,7 +90,7 @@ namespace EngineCore.Behaviours
             }
             if (movementDirection != Vector3.Zero)
             {
-                this.Transform.Position += Vector3.Normalize(movementDirection) *  GetCameraSpeed() * Time.DeltaTime;
+                this.Transform.Position += Vector3.Normalize(movementDirection) * GetCameraSpeed() * Time.DeltaTime;
             }
         }
 
