@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EngineCore.Graphics
 {
-    public class SimpleShader
+    public class SimpleShader : IDisposable
     {
         private Device device;
         private DeviceContext deviceContext;
@@ -39,6 +39,13 @@ namespace EngineCore.Graphics
             deviceContext.InputAssembler.InputLayout = this.inputLayout;
             deviceContext.VertexShader.Set(this.vertexShader);
             deviceContext.PixelShader.Set(this.pixelShader);
+        }
+
+        public void Dispose()
+        {
+            this.vertexShader.Dispose();
+            this.pixelShader.Dispose();
+            this.inputLayout.Dispose();
         }
     }
 }

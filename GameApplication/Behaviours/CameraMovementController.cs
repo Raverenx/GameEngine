@@ -88,6 +88,7 @@ namespace EngineCore.Behaviours
             {
                 movementDirection += -Transform.Up;
             }
+
             if (movementDirection != Vector3.Zero)
             {
                 this.Transform.Position += Vector3.Normalize(movementDirection) * GetCameraSpeed() * Time.DeltaTime;

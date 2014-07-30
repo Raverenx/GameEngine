@@ -20,6 +20,17 @@ namespace EngineCore
             return *((System.Numerics.Vector3*)(&vec));
         }
 
+        public static unsafe BEPUutilities.Vector2 ToBepuVector(this System.Numerics.Vector2 vec)
+        {
+            return *((BEPUutilities.Vector2*)(&vec));
+        }
+
+        // Reinterpret cast, bits are identical
+        public static unsafe System.Numerics.Vector2 ToSimdVector(this BEPUutilities.Vector2 vec)
+        {
+            return *((System.Numerics.Vector2*)(&vec));
+        }
+
         // Reinterpret cast, bits are identical
         public static unsafe System.Numerics.Quaternion ToSimdQuaternion(this BEPUutilities.Quaternion quaternion)
         {

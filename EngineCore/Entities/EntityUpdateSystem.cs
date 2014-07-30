@@ -27,7 +27,7 @@ namespace EngineCore.Entities
 
         public override void Update()
         {
-            foreach (IUpdateableEntity entity in entities)
+            foreach (IUpdateableEntity entity in new List<IUpdateableEntity>(entities))
             {
                 entity.Update();
             }

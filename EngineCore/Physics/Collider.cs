@@ -24,18 +24,13 @@ namespace EngineCore.Physics
                 {
                     if (old != null)
                     {
-                        system.RemoveEntity(old);
+                        system.RemoveObject(old);
                     }
-                    system.AddEntity(value);
+                    system.AddOject(value);
                 }
 
-                value.PositionUpdated += OnPositionUpdated;
+                value.PositionUpdated += Transform.OnPhysicsUpdate;
             }
-        }
-
-        private void OnPositionUpdated(Entity entity)
-        {
-            this.Transform.OnPhysicsUpdate(entity.Position, entity.Orientation);
         }
 
         protected override void Initialize(BepuPhysicsSystem system)
@@ -46,9 +41,20 @@ namespace EngineCore.Physics
             this.system = system;
             if (this.physicsEntity != null)
             {
-                system.AddEntity(this.physicsEntity);
+                system.AddOject(this.physicsEntity);
                 OnTransformPositionManuallyChanged(this.Transform.Position);
                 OnTransformRotationManuallyChanged(this.Transform.Rotation);
+            }
+        }
+
+        protected override void Uninitialize(BepuPhysicsSystem system)
+        {
+            this.Transform.PositionChanged -= OnTransformPositionManuallyChanged;
+            this.Transform.RotationChanged -= OnTransformRotationManuallyChanged;
+
+            if (this.physicsEntity != null)
+            {
+                system.RemoveObject(this.physicsEntity);
             }
         }
 

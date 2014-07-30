@@ -101,11 +101,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviours\Behaviour.cs" />
-    <Compile Include="Behaviours\CameraMovementController.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\Transform.cs" />
     <Compile Include="Input\InputSystem.cs" />
+    <Compile Include="Physics\BoxCollider.cs" />
+    <Compile Include="Physics\CharacterController.cs" />
     <Compile Include="Physics\Collider.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utility\Convert.cs" />
@@ -128,6 +128,7 @@
     <Compile Include="Graphics\SimpleVertex.cs" />
     <Compile Include="Graphics\SharpDxGraphicsSystem.cs" />
     <Compile Include="Entities\IUpdateableEntity.cs" />
+    <Compile Include="Utility\MathUtil.cs" />
     <Compile Include="Utility\Resources.cs" />
     <Compile Include="Utility\Util.cs" />
   </ItemGroup>

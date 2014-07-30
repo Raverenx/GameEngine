@@ -28,5 +28,10 @@ namespace EngineCore.Graphics
         {
             system.SetCamera(this);
         }
+
+        protected override void Uninitialize(SharpDxGraphicsSystem system)
+        {
+
+        }
     }
 }

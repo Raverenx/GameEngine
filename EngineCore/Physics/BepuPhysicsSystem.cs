@@ -17,12 +17,6 @@ namespace EngineCore.Physics
             : base(game)
         {
             this.space = new Space(new BEPUutilities.Threading.ParallelLooper());
-            game.OnGameObjectAdded += this.OnGameObjectAdded;
-        }
-
-        private void OnGameObjectAdded(GameObject obj)
-        {
-
         }
 
         public override void Update()
@@ -30,12 +24,12 @@ namespace EngineCore.Physics
             space.Update(Time.DeltaTime);
         }
 
-        public void AddEntity(Entity entity)
+        public void AddOject(ISpaceObject entity)
         {
             space.Add(entity);
         }
 
-        public void RemoveEntity(Entity entity)
+        public void RemoveObject(ISpaceObject entity)
         {
             space.Remove(entity);
         }

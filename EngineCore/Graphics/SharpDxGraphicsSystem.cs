@@ -33,7 +33,6 @@ namespace EngineCore.Graphics
         {
             renderer = new SimpleRenderer();
             renderer.Form.MouseDown += OnMouseDown;
-            renderer.Form.KeyDown += OnKeyDown;
             renderer.Form.FormClosing += OnFormClosing;
             renderer.Renderables = new List<IRenderable>();
             Application.Run(renderer.Form);
@@ -54,21 +53,6 @@ namespace EngineCore.Graphics
             else if (e.Button == MouseButtons.Right)
             {
                 renderer.Form.Text = renderer.Form.Text.Substring(0, renderer.Form.Text.Length - 1);
-            }
-        }
-
-        private void FireBoxForward()
-        {
-            GameObject box  = GameObject.CreateBox(this.renderer, 0.2f, 0.2f, 0.2f, .2f);
-            box.GetComponent<Collider>().PhysicsEntity.LinearVelocity = (renderer.MainCamera.Forward * 25.0f).ToBepuVector();
-            box.Transform.Position = renderer.MainCamera.Position + renderer.MainCamera.Forward * 1.5f;
-        }
-
-        private void OnKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.F)
-            {
-                FireBoxForward();
             }
         }
 

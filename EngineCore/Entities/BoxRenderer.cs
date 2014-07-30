@@ -95,5 +95,12 @@ namespace EngineCore.Entities
 
             system.Renderer.Renderables.Add(this);
         }
+
+        protected override void Uninitialize(SharpDxGraphicsSystem system)
+        {
+            system.Renderer.Renderables.Remove(this);
+            this.cubeMesh.Dispose();
+            this.shader.Dispose();
+        }
     }
 }

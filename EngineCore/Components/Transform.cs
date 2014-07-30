@@ -26,7 +26,7 @@ namespace EngineCore.Components
             }
         }
 
-        internal Action<Vector3> PositionChanged = null;
+        internal event Action<Vector3> PositionChanged;
         private void OnPositionChanged()
         {
             if (PositionChanged != null)
@@ -46,7 +46,7 @@ namespace EngineCore.Components
             }
         }
 
-        internal Action<Quaternion> RotationChanged = null;
+        internal event Action<Quaternion> RotationChanged;
         private void OnRotationChanged()
         {
             if (RotationChanged != null)
@@ -59,7 +59,20 @@ namespace EngineCore.Components
         public Vector3 Scale
         {
             get { return scale; }
-            set { scale = value; }
+            set
+            {
+                scale = value;
+                this.OnScalechanged();
+            }
+        }
+
+        internal event Action<Vector3> ScaleChanged;
+        private void OnScalechanged()
+        {
+            if (ScaleChanged != null)
+            {
+                this.ScaleChanged(this.scale);
+            }
         }
 
         public Matrix4x4 WorldMatrix
@@ -96,10 +109,10 @@ namespace EngineCore.Components
             }
         }
 
-        internal void OnPhysicsUpdate(BEPUutilities.Vector3 newPosition, BEPUutilities.Quaternion newRotation)
+        internal void OnPhysicsUpdate(BEPUphysics.Entities.Entity obj)
         {
-            this.position = newPosition.ToSimdVector();
-            this.rotation = newRotation.ToSimdQuaternion();
+            this.position = obj.Position.ToSimdVector();
+            this.rotation = obj.Orientation.ToSimdQuaternion();
         }
     }
 }

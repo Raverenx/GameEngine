@@ -15,11 +15,17 @@ namespace EngineCore.Behaviours
             system.AddEntity(this);
         }
 
+        protected override void Uninitialize(EntityUpdateSystem system)
+        {
+            system.RemoveEntity(this);
+        }
+
         void IUpdateableEntity.Update()
         {
             this.Update();
         }
 
         protected abstract void Update();
+
     }
 }

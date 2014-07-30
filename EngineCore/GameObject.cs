@@ -52,6 +52,16 @@ namespace EngineCore
             return component;
         }
 
+        public void RemoveComponent<T>() where T : Component
+        {
+            T component = this.GetComponent<T>();
+            if (game != null)
+            {
+                UninitializeSingleComponent(this.game, component);
+            }
+            this.components.Remove(new KeyValuePair<Type, Component>(typeof(T), component));
+        }
+
         public void InitializeComponents(Game game)
         {
             this.game = game;
@@ -72,26 +82,41 @@ namespace EngineCore
             component.Initialize(this, system);
         }
 
-        public static GameObject CreateBox(SimpleRenderer renderer, float width, float height, float depth, float mass = 1.0f)
+        private void UninitializeSingleComponent(Game game, Component component)
+        {
+            GameSystem system = null;
+            Type dependencyType = component.GetDependency();
+            if (dependencyType != null)
+            {
+                system = game.GetSystem(dependencyType);
+            }
+            component.Uninitialize(this, system);
+        }
+
+        public static GameObject CreateBox(float width, float height, float depth, float mass = 1.0f)
         {
             GameObject box = new GameObject();
             var boxRenderer = box.AddComponent<BoxRenderer>();
             boxRenderer.Scale = new Vector3(width, height, depth);
-            var physicsEntity = new BEPUphysics.Entities.Prefabs.Box(Vector3.Zero.ToBepuVector(), width, height, depth, mass);
-            var collider = box.AddComponent<Collider>();
-            collider.PhysicsEntity = physicsEntity;
+            var collider = box.AddComponent<BoxCollider>();
+            collider.Width = width;
+            collider.Height = height;
+            collider.Length = depth;
+            collider.Mass = mass;
 
             return box;
         }
 
-        public static GameObject CreateStaticBox(SimpleRenderer renderer, float width, float height, float depth)
+        public static GameObject CreateStaticBox(float width, float height, float depth)
         {
             GameObject box = new GameObject();
             var boxRenderer = box.AddComponent<BoxRenderer>();
             boxRenderer.Scale = new Vector3(width, height, depth);
-            var physicsEntity = new BEPUphysics.Entities.Prefabs.Box(Vector3.Zero.ToBepuVector(), width, height, depth);
-            var collider = box.AddComponent<Collider>();
-            collider.PhysicsEntity = physicsEntity;
+            var collider = box.AddComponent<BoxCollider>();
+            collider.Width = width;
+            collider.Height = height;
+            collider.Length = depth;
+            collider.Mass = -1.0f;
 
             return box;
         }

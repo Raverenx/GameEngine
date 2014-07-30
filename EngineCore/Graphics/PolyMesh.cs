@@ -11,7 +11,7 @@ using Matrix4x4 = System.Numerics.Matrix4x4;
 
 namespace EngineCore.Graphics
 {
-    public class PolyMesh
+    public class PolyMesh : IDisposable
     {
         /// <summary>
         /// The vertex buffer of the mesh
@@ -42,6 +42,13 @@ namespace EngineCore.Graphics
             inputAssembler.SetVertexBuffers(0, new VertexBufferBinding(VertexBuffer, SimpleVertex.Size, 0));
             inputAssembler.SetIndexBuffer(IndexBuffer, SharpDX.DXGI.Format.R32_UInt, 0);
             renderer.DeviceContext.DrawIndexed(indexCount, 0, 0);
+        }
+
+        public void Dispose()
+        {
+            VertexBuffer.Dispose();
+            NormalBuffer.Dispose();
+            IndexBuffer.Dispose();
         }
     }
 }
