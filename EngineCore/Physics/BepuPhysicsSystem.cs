@@ -13,10 +13,16 @@ namespace EngineCore.Physics
     public class BepuPhysicsSystem : GameSystem
     {
         private Space space;
+        private BEPUutilities.Threading.ParallelLooper looper;
         public BepuPhysicsSystem(Game game)
             : base(game)
         {
-            this.space = new Space(new BEPUutilities.Threading.ParallelLooper());
+            this.looper = new BEPUutilities.Threading.ParallelLooper();
+            for (int g = 0; g < Environment.ProcessorCount; g++)
+            {
+                this.looper.AddThread();
+            }
+            this.space = new Space(this.looper);
         }
 
         public override void Update()
