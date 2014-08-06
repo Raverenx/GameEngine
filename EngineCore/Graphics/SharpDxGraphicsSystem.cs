@@ -52,7 +52,7 @@ namespace EngineCore.Graphics
             }
             else if (e.Button == MouseButtons.Right)
             {
-                renderer.Form.Text = renderer.Form.Text.Substring(0, renderer.Form.Text.Length - 1);
+                renderer.Form.Text = renderer.Form.Text.Length != 0 ? renderer.Form.Text.Substring(0, renderer.Form.Text.Length - 1) : "Empty";
             }
         }
 

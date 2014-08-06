@@ -83,7 +83,6 @@ namespace EngineCore.Behaviours
             tracker = this.heldBox.AddComponent<Tracker>();
             tracker.TrackedObject = this.Transform;
             tracker.Offset = new Vector3(0, 0, 3.0f);
-
         }
 
         private void FireBoxForward()
@@ -91,6 +90,23 @@ namespace EngineCore.Behaviours
             GameObject box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
             box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f).ToBepuVector();
             box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f;
+
+            // Uncomment this if you want insane box firing
+            //box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
+            //box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f).ToBepuVector();
+            //box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f + this.Transform.Right * .5f;
+
+            //box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
+            //box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f).ToBepuVector();
+            //box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f - this.Transform.Right * .5f;
+
+            //box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
+            //box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f).ToBepuVector();
+            //box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f + this.Transform.Up * .5f;
+
+            //box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
+            //box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f).ToBepuVector();
+            //box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f - this.Transform.Up * .5f;
         }
 
         protected override void Uninitialize(Entities.EntityUpdateSystem system)

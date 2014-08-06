@@ -49,7 +49,7 @@ namespace EngineCore.Behaviours
             {
                 var normalized = Vector3.Normalize(movementDirection);
                 normalized.Y = 0f;
-                var motionDirection = new Vector2(normalized.X, normalized.Z);
+                var motionDirection = new Vector2(-normalized.X, normalized.Z);
                 controller.SetMotionDirection(motionDirection * MovementSpeed * Time.DeltaTime);
             }
             else

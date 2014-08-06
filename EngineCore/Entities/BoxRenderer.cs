@@ -39,18 +39,7 @@ namespace EngineCore.Entities
             get { return this.scaleMatrix * Transform.WorldMatrix; }
         }
 
-        protected override void Initialize(SharpDxGraphicsSystem system)
-        {
-            this.shader = new SimpleShader(system.Renderer.Device, system.Renderer.DeviceContext, Resources.LightShader, "VS", "PS",
-                new InputElement[]
-                {
-                    new InputElement("Position", 0, Format.R32G32B32_Float, SimpleVertex.PositionOffset, 0),
-                    new InputElement("Normal", 0, Format.R32G32B32_Float, SimpleVertex.NormalOffset, 0),
-                    new InputElement("Color", 0, Format.R32G32B32A32_Float, SimpleVertex.ColorOffset, 0)
-                });
-
-            this.cubeMesh = new PolyMesh(system.Renderer.Device,
-                new SimpleVertex[]
+        private static readonly SimpleVertex[] cubeVertices = new SimpleVertex[]
                 {
                     // Top
                     new SimpleVertex(new Vector3(-.5f,.5f,.5f), new Vector3(0,1,0), Color4f.Red),
@@ -82,8 +71,9 @@ namespace EngineCore.Entities
                     new SimpleVertex(new Vector3(.5f,.5f,-.5f),new Vector3(0,0,1),Color4f.Orange),
                     new SimpleVertex(new Vector3(.5f,-.5f,-.5f),new Vector3(0,0,1),Color4f.Orange),
                     new SimpleVertex(new Vector3(-.5f,-.5f,-.5f),new Vector3(0,0,1),Color4f.Orange)
-                },
-                new int[]
+                };
+
+        private static readonly int[] cubeIndices = new int[]
                 {
                     0,1,2,0,2,3,
                     4,5,6,4,6,7,
@@ -91,7 +81,23 @@ namespace EngineCore.Entities
                     12,13,14,12,14,15,
                     16,17,18,16,18,19,
                     20,21,22,20,22,23
-                });
+                };
+
+        private static readonly InputElement[] defaultCubeShaderInputs = new InputElement[]
+                {
+                    new InputElement("Position", 0, Format.R32G32B32_Float, SimpleVertex.PositionOffset, 0),
+                    new InputElement("Normal", 0, Format.R32G32B32_Float, SimpleVertex.NormalOffset, 0),
+                    new InputElement("Color", 0, Format.R32G32B32A32_Float, SimpleVertex.ColorOffset, 0)
+                };
+
+        protected override void Initialize(SharpDxGraphicsSystem system)
+        {
+            this.shader = ShaderCache.GetNewOrCachedShader(system.Renderer.Device, system.Renderer.DeviceContext, Resources.LightShader, "VS", "PS",
+                defaultCubeShaderInputs);
+
+            this.cubeMesh = new PolyMesh(system.Renderer.Device,
+                cubeVertices,
+                cubeIndices);
 
             system.Renderer.Renderables.Add(this);
         }

@@ -76,6 +76,12 @@ namespace EngineCore
             while (running)
             {
                 RunSingleFrame();
+#if DEBUG
+                if (InputSystem.GetKeyDown(System.Windows.Forms.Keys.Pause))
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
+#endif
             }
             Debug.WriteLine("Exiting");
         }
@@ -92,12 +98,19 @@ namespace EngineCore
                 system.Update();
             }
             DateTime afterFrameTime = DateTime.UtcNow;
-            var elapsed = (afterFrameTime - beforeFrameTime).TotalSeconds;
-            var sleepTime = desiredFrameLength - elapsed;
+            double elapsed = (afterFrameTime - beforeFrameTime).TotalSeconds;
+            double sleepTime = desiredFrameLength - elapsed;
             if (sleepTime > 0.0)
             {
-                //Debug.WriteLine("Sleep time: " + sleepTime);
+#if USE_SLEEP0
+                DateTime finishTime = afterFrameTime + TimeSpan.FromSeconds(sleepTime);
+                while (DateTime.UtcNow < finishTime)
+                {
+                    while (Thread.Yield()) { } // This can't be right
+                }
+#else
                 Thread.Sleep((int)(sleepTime * 1000));
+#endif
             }
             else
             {

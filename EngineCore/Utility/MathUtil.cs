@@ -1,7 +1,7 @@
-﻿using SharpDX;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +20,34 @@ namespace EngineCore.Utility
             {
                 return vec / length;
             }
+        }
+
+        public static Matrix4x4 CreateLookAtLH(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 cameraUpVector)
+        {
+            // Calculation from here:
+            // http://msdn.microsoft.com/en-us/library/windows/desktop/bb281710%28v=vs.85%29.aspx
+
+            var zaxis = Vector3.Normalize(cameraTarget - cameraPosition);
+            var xaxis = Vector3.Normalize(Vector3.Cross(cameraUpVector, zaxis));
+            var yaxis = Vector3.Cross(zaxis, xaxis);
+
+            return new Matrix4x4(xaxis.X, yaxis.X, zaxis.X, 0,
+                xaxis.Y, yaxis.Y, zaxis.Y, 0,
+                xaxis.Z, yaxis.Z, zaxis.Z, 0,
+                -Vector3.Dot(xaxis, cameraPosition), -Vector3.Dot(yaxis, cameraPosition),
+                -Vector3.Dot(zaxis, cameraPosition), 1f);
+        }
+
+        public static Matrix4x4 CreatePerspectiveFovLH(float fieldOfViewY, float aspectRatio, float zNearPlane, float zFarPlane)
+        {
+            float yScale = 1f / (float)Math.Tan(fieldOfViewY * .5f);
+            float xScale = yScale / aspectRatio;
+
+            return new Matrix4x4(
+                xScale, 0, 0, 0,
+                0, yScale, 0, 0,
+                0, 0, zFarPlane / (zFarPlane - zNearPlane), 1,
+                0, 0, -zNearPlane * zFarPlane / (zFarPlane - zNearPlane), 0);
         }
     }
 }

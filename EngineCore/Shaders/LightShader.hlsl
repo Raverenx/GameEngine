@@ -34,9 +34,9 @@ PixelInput VS(VertexInput input)
 {
 	PixelInput output = (PixelInput) 0;
 
-	output.position = mul(world, input.position);
-	output.position = mul(view, output.position);
-	output.position = mul(projection, output.position);
+	float4 worldPosition = mul(world, input.position);
+	float4 viewPosition = mul(view, worldPosition);
+	output.position = mul(projection, viewPosition);
 	output.normal = mul(world, input.normal);
 	output.color = input.color;
 

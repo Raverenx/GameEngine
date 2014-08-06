@@ -39,6 +39,9 @@ namespace EngineCore.Input
         private static HashSet<Keys> currentlyPressedKeys = new HashSet<Keys>();
         private static HashSet<Keys> newKeysDownThisFrame = new HashSet<Keys>();
 
+        private static HashSet<Keys> newlyQueuedKeys = new HashSet<Keys>();
+        private static HashSet<MouseButtons> newlyQueuedMouseButtons = new HashSet<MouseButtons>();
+
         private static HashSet<MouseButtons> currentlyPressedMouseButtons = new HashSet<MouseButtons>();
         private static HashSet<MouseButtons> newMouseButtonsDownThisFrame = new HashSet<MouseButtons>();
 
@@ -61,6 +64,7 @@ namespace EngineCore.Input
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
             currentlyPressedKeys.Remove(e.KeyCode);
+            newlyQueuedKeys.Remove(e.KeyCode);
             newKeysDownThisFrame.Remove(e.KeyCode);
         }
 
@@ -68,7 +72,7 @@ namespace EngineCore.Input
         {
             if (currentlyPressedKeys.Add(e.KeyCode))
             {
-                newKeysDownThisFrame.Add(e.KeyCode);
+                newlyQueuedKeys.Add(e.KeyCode);
             }
         }
 
@@ -80,13 +84,15 @@ namespace EngineCore.Input
         private void OnMouseUp(object sender, MouseEventArgs e)
         {
             currentlyPressedMouseButtons.Remove(e.Button);
-            newMouseButtonsDownThisFrame.Remove(e.Button);
+            newlyQueuedMouseButtons.Remove(e.Button);
         }
 
         private void OnMouseDown(object sender, MouseEventArgs e)
         {
-            currentlyPressedMouseButtons.Add(e.Button);
-            newMouseButtonsDownThisFrame.Add(e.Button);
+            if (currentlyPressedMouseButtons.Add(e.Button))
+            {
+                newlyQueuedMouseButtons.Add(e.Button);
+            }
         }
 
         public override void Stop()
@@ -96,9 +102,13 @@ namespace EngineCore.Input
 
         public override void Update()
         {
-            newKeysDownThisFrame.Clear();
-            newMouseButtonsDownThisFrame.Clear();
             MouseWheelDelta = 0f;
+
+            newMouseButtonsDownThisFrame = newlyQueuedMouseButtons;
+            newlyQueuedMouseButtons = new HashSet<MouseButtons>();
+
+            newKeysDownThisFrame = newlyQueuedKeys;
+            newlyQueuedKeys = new HashSet<Keys>();
         }
     }
 }

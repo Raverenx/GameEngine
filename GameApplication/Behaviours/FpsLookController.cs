@@ -37,7 +37,7 @@ namespace EngineCore.Behaviours
 
             if (InputSystem.GetMouseButton(MouseButtons.Left) || InputSystem.GetMouseButton(MouseButtons.Right))
             {
-                currentYaw += -xDelta * 0.01f;
+                currentYaw += xDelta * 0.01f;
                 currentPitch += yDelta * 0.01f;
 
                 this.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(currentYaw, currentPitch, 0f);

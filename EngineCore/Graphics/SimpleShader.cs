@@ -21,8 +21,13 @@ namespace EngineCore.Graphics
         {
             this.device = device;
             this.deviceContext = deviceContext;
-            var compiledVertexShader = ShaderBytecode.CompileFromFile(fileName, vsEntryPoint, "vs_5_0");
-            var compiledPixelShader = ShaderBytecode.CompileFromFile(fileName, psEntryPoint, "ps_5_0");
+            ShaderFlags shaderFlags = ShaderFlags.None;
+#if DEBUG
+            shaderFlags |= ShaderFlags.Debug | ShaderFlags.SkipOptimization;
+#endif
+
+            var compiledVertexShader = ShaderBytecode.CompileFromFile(fileName, vsEntryPoint, "vs_5_0", shaderFlags);
+            var compiledPixelShader = ShaderBytecode.CompileFromFile(fileName, psEntryPoint, "ps_5_0", shaderFlags);
 
             this.vertexShader = new VertexShader(device, compiledVertexShader);
             this.pixelShader = new PixelShader(device, compiledPixelShader);
