@@ -13,6 +13,7 @@ namespace EngineCore.Graphics
 {
     public class Camera : Component<SharpDxGraphicsSystem>
     {
+        private ProjectionType projectionType = ProjectionType.Perspective;
         public Vector3 Position { get { return Transform.Position; } }
         public Vector3 Forward { get { return Transform.Forward; } }
         public Vector3 Up { get { return Transform.Up; } }
@@ -33,5 +34,24 @@ namespace EngineCore.Graphics
         {
 
         }
+
+        internal Matrix4x4 GetProjectionMatrix()
+        {
+            switch (this.projectionType)
+            {
+                case ProjectionType.Perspective:
+                    return MathUtil.CreatePerspectiveFovLH(90, 1.0f, .5f, 1000f);
+                case ProjectionType.Orthographic:
+                    return MathUtil.CreateOrthographic(10, 10, .5f, 1000f);
+                default:
+                    throw new InvalidOperationException("Can't use ProjectionType value: " + this.projectionType);
+            }
+        }
     }
+}
+
+public enum ProjectionType
+{
+    Perspective,
+    Orthographic
 }

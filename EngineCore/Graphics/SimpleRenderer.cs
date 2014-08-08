@@ -227,7 +227,7 @@ namespace EngineCore.Graphics
         private void UpdateViewProjectionBuffers()
         {
             float windowRatio = (float)renderForm.ClientRectangle.Width / (float)renderForm.ClientRectangle.Height;
-            projectionMatrix = EngineCore.Utility.MathUtil.CreatePerspectiveFovLH(1.05f, windowRatio, 0.1f, 1000.0f);
+            projectionMatrix = camera.GetProjectionMatrix();
             viewMatrix = camera.GetViewMatrix();
         }
 
