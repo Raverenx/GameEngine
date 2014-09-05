@@ -38,6 +38,9 @@ namespace EngineCore.Graphics
         private SamplerState samplerState;
         private BlendState blendState;
         private RasterizerState rasterizerState;
+#if TEXT_RENDERER
+        public SimpleText TextRenderer { get; private set; }
+#endif
 
         private Camera camera;
         public Camera MainCamera
@@ -56,6 +59,7 @@ namespace EngineCore.Graphics
         // Ambient Color Properties
         private SharpDX.Direct3D11.Buffer ambientLightBuffer;
         private Color4f ambientColor;
+        private SharpDX.Toolkit.Graphics.GraphicsDevice __2dGraphicsDevice;
         public Color4f AmbientColor
         {
             get { return ambientColor; }
@@ -74,16 +78,17 @@ namespace EngineCore.Graphics
 
         public SimpleRenderer()
         {
-            this.renderForm = new RenderForm("Simple Renderer (SharpDX)");
+            string title = "SharpDX Renderer (SIMD " + (Vector.IsHardwareAccelerated ? "Enabled" : "Disabled") + ")";
+            title += Environment.Is64BitProcess ? " 64-bit" : " 32-bit";
+            this.renderForm = new RenderForm(title);
             this.Renderables = new List<IRenderable>();
             CreateAndInitializeDevice();
             renderForm.Show();
             AmbientColor = new Color4f(.25f, .25f, .25f, 1);
 #if TEXT_RENDERER
-            this.TextRenderer = new SimpleText(this.device, "Fonts/textfont.dds");
+            this.TextRenderer = new SimpleText(this.Get2DGraphicsDevice(), "Fonts/textfont.dds");
 #endif
         }
-
         private void CreateAndInitializeDevice()
         {
             var swapChainDescription = new SwapChainDescription()
@@ -98,6 +103,7 @@ namespace EngineCore.Graphics
             };
             SharpDX.Direct3D11.Device.CreateWithSwapChain(SharpDX.Direct3D.DriverType.Hardware, DeviceCreationFlags.None, swapChainDescription, out device, out swapChain);
             deviceContext = device.ImmediateContext;
+            __2dGraphicsDevice = SharpDX.Toolkit.Graphics.GraphicsDevice.New(device);
 
             var factory = SwapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(renderForm.Handle, WindowAssociationFlags.IgnoreAll);
@@ -209,6 +215,7 @@ namespace EngineCore.Graphics
                 Type = QueryType.PipelineStatistics
             });
             deviceContext.Begin(statisticsQuery);
+            TextRenderer.BeginDraw();
             foreach (var renderable in new List<IRenderable>(Renderables))
             {
                 renderable.Render(this);
@@ -221,6 +228,8 @@ namespace EngineCore.Graphics
             TextRenderer.DrawText("PS Invocations: " + result.PSInvocationCount, new Vector2(0, 75));
             TextRenderer.DrawText("Input Vertices: " + result.IAVerticeCount, new Vector2(0, 100));
 #endif
+            TextRenderer.EndDraw();
+
             swapChain.Present(0, PresentFlags.None);
         }
 
@@ -293,6 +302,11 @@ namespace EngineCore.Graphics
         internal void RenderFrame()
         {
             this.OnRendering();
+        }
+
+        internal SharpDX.Toolkit.Graphics.GraphicsDevice Get2DGraphicsDevice()
+        {
+            return this.__2dGraphicsDevice;
         }
     }
 

@@ -1301,7 +1301,7 @@
         </member>
         <member name="P:System.Numerics.Strings.Reflection_MethodNotSupported">
             <summary>
-              Looks up a localized string similar to Vector&lt;T&gt;.Length cannot be called via reflection when intrinsics are enabled..
+              Looks up a localized string similar to Vector&lt;T&gt;.Count cannot be called via reflection when intrinsics are enabled..
             </summary>
         </member>
         <member name="T:System.Numerics.Vector`1">

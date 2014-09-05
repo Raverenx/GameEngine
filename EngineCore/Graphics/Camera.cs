@@ -21,7 +21,9 @@ namespace EngineCore.Graphics
         internal Matrix4x4 GetViewMatrix()
         {
             var lookAt = this.Position + this.Forward;
-            return MathUtil.CreateLookAtLH(this.Position, lookAt, this.Up);
+            Vector3 position = this.Position;
+            Vector3 up = this.Transform.Up;
+            return MathUtil.CreateLookAtLH(position, lookAt, up);
         }
 
         protected override void Initialize(SharpDxGraphicsSystem system)

@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using Matrix4x4 = System.Numerics.Matrix4x4;
+using EngineCore.Components;
 
 namespace EngineCore.Graphics
 {
-    public class FpsTracker : IRenderable
+    public class FpsTracker : Component<SharpDxGraphicsSystem>, IRenderable 
     {
         public Vector2 Position { get; set; }
 
@@ -18,10 +19,10 @@ namespace EngineCore.Graphics
         private LinkedList<double> frameTimes;
         private double totalFrameTime;
 
-#if TEXT_RENDERER
         private SimpleText textRenderer;
-#endif
         private Stopwatch stopwatch;
+        private string fontName = "Fonts/textfont.dds";
+
         private double FramesPerSecond
         {
             get
@@ -30,8 +31,9 @@ namespace EngineCore.Graphics
             }
         }
 
-        public FpsTracker(Device device, string fontFilename)
+        protected override void Initialize(SharpDxGraphicsSystem system)
         {
+            this.textRenderer = system.Renderer.TextRenderer;
             this.stopwatch = new Stopwatch();
             this.stopwatch.Start();
             this.frameTimes = new LinkedList<double>();
@@ -39,14 +41,20 @@ namespace EngineCore.Graphics
             {
                 frameTimes.AddLast(this.stopwatch.ElapsedMilliseconds / 1000.0);
             }
+
+            system.Renderer.Renderables.Add(this);
+        }
+
+        protected override void Uninitialize(SharpDxGraphicsSystem system)
+        {
+            system.Renderer.Renderables.Remove(this);
+            
         }
 
         public void Render(SimpleRenderer renderer)
         {
             UpdateFrameCount();
-#if TEXT_RENDERER
             textRenderer.DrawText(FramesPerSecond.ToString("####.00") + " FPS", this.Position);
-#endif
         }
 
         private void UpdateFrameCount()

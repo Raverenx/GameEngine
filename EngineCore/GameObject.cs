@@ -52,6 +52,15 @@ namespace EngineCore
             return component;
         }
 
+        public void AddComponent<T>(T component) where T : Component
+        {
+            this.components.Add(typeof(T), component);
+            if (game != null)
+            {
+                InitializeSingleComponent(this.game, component);
+            }
+        }
+
         public void RemoveComponent<T>() where T : Component
         {
             T component = this.GetComponent<T>();

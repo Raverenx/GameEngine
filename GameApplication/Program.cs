@@ -12,15 +12,30 @@ using System.Windows.Forms;
 
 namespace GameApplication
 {
+
     static class Program
     {
+        private static Vector<Single> _hack;
+        static Program()
+        {
+            _hack = Vector<Single>.One;
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         static void Main()
         {
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
             Game game = new BoxGame();
             game.Start();
+        }
+
+        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception exception = (Exception)e.ExceptionObject;
+
+            MessageBox.Show("ERROR:" + Environment.NewLine + exception);
         }
 
         public class BoxGame : Game
@@ -80,6 +95,9 @@ namespace GameApplication
 
                 var wall4 = GameObject.CreateStaticBox(0.5f, 11.0f, 50f);
                 wall4.Transform.Position = new Vector3(-25f, 5.5f, 0f);
+
+                var framerateTracker = new GameObject();
+                framerateTracker.AddComponent<FpsTracker>();
             }
         }
     }
