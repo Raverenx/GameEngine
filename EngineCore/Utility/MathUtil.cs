@@ -49,5 +49,14 @@ namespace EngineCore.Utility
                 0, 0, zFarPlane / (zFarPlane - zNearPlane), 1,
                 0, 0, -zNearPlane * zFarPlane / (zFarPlane - zNearPlane), 0);
         }
+
+        internal static Matrix4x4 CreateOrthographic(float width, float height, float zNear, float zFar)
+        {
+            return new Matrix4x4(
+                2 / width, 0, 0, 0,
+                0, 2 / height, 0, 0,
+                0, 0, 1 / (zFar - zNear), 0,
+                0,0, zNear / (zNear - zFar), 1);
+        }
     }
 }
