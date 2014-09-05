@@ -33,7 +33,9 @@ namespace EngineCore.Graphics
 
         protected override void Initialize(SharpDxGraphicsSystem system)
         {
+#if TEXT_RENDERER
             this.textRenderer = system.Renderer.TextRenderer;
+#endif
             this.stopwatch = new Stopwatch();
             this.stopwatch.Start();
             this.frameTimes = new LinkedList<double>();
@@ -54,7 +56,9 @@ namespace EngineCore.Graphics
         public void Render(SimpleRenderer renderer)
         {
             UpdateFrameCount();
+#if TEXT_RENDERER
             textRenderer.DrawText(FramesPerSecond.ToString("####.00") + " FPS", this.Position);
+#endif
         }
 
         private void UpdateFrameCount()

@@ -5,7 +5,7 @@ cbuffer MatrixBuffer :register(b0)
 	float4x4 projection;
 }
 
-cbuffer LightBuffer :register(b0)
+cbuffer LightBuffer : register(b0)
 {
 	float4 diffuseColor;
 	float4 lightDirection;

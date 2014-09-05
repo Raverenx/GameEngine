@@ -101,10 +101,15 @@ namespace EngineCore.Graphics
                 SwapEffect = SwapEffect.Discard,
                 Usage = Usage.RenderTargetOutput
             };
-            SharpDX.Direct3D11.Device.CreateWithSwapChain(SharpDX.Direct3D.DriverType.Hardware, DeviceCreationFlags.None, swapChainDescription, out device, out swapChain);
+            DeviceCreationFlags flags = DeviceCreationFlags.None;
+#if DEBUG
+            flags |= DeviceCreationFlags.Debug;
+#endif
+            SharpDX.Direct3D11.Device.CreateWithSwapChain(SharpDX.Direct3D.DriverType.Hardware, flags, swapChainDescription, out device, out swapChain);
             deviceContext = device.ImmediateContext;
+#if TEXT_RENDERER
             __2dGraphicsDevice = SharpDX.Toolkit.Graphics.GraphicsDevice.New(device);
-
+#endif
             var factory = SwapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(renderForm.Handle, WindowAssociationFlags.IgnoreAll);
 
@@ -215,7 +220,9 @@ namespace EngineCore.Graphics
                 Type = QueryType.PipelineStatistics
             });
             deviceContext.Begin(statisticsQuery);
+#if TEXT_RENDERER
             TextRenderer.BeginDraw();
+#endif
             foreach (var renderable in new List<IRenderable>(Renderables))
             {
                 renderable.Render(this);
@@ -227,8 +234,9 @@ namespace EngineCore.Graphics
             TextRenderer.DrawText("VS Invocations: " + result.VSInvocationCount, new Vector2(0, 50));
             TextRenderer.DrawText("PS Invocations: " + result.PSInvocationCount, new Vector2(0, 75));
             TextRenderer.DrawText("Input Vertices: " + result.IAVerticeCount, new Vector2(0, 100));
-#endif
+
             TextRenderer.EndDraw();
+#endif
 
             swapChain.Present(0, PresentFlags.None);
         }

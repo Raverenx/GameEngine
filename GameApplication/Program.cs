@@ -35,7 +35,13 @@ namespace GameApplication
         {
             Exception exception = (Exception)e.ExceptionObject;
 
-            MessageBox.Show("ERROR:" + Environment.NewLine + exception);
+            var result = MessageBox.Show("ERROR:" + Environment.NewLine + exception
+                + Environment.NewLine + Environment.NewLine + "Yes = Debug, No = Cancel",
+                "Error", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                System.Diagnostics.Debugger.Launch();
+            }
         }
 
         public class BoxGame : Game
