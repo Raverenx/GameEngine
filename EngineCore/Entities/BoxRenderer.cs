@@ -85,7 +85,7 @@ namespace EngineCore.Entities
 
         protected override void Initialize(SharpDxGraphicsSystem system)
         {
-            this.shader = ShaderCache.GetNewOrCachedShader(
+            this.shader = system.ShaderCache.GetNewOrCachedShader(
                 system.Renderer.Device, 
                 system.Renderer.DeviceContext, 
                 Resources.LightShader, 

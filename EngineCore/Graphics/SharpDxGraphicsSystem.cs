@@ -14,8 +14,10 @@ namespace EngineCore.Graphics
 {
     public class SharpDxGraphicsSystem : GameSystem
     {
-        SimpleRenderer renderer;
+        private ShaderCache shaderCache = new ShaderCache();
+        public ShaderCache ShaderCache { get { return shaderCache; } }
 
+        SimpleRenderer renderer;
         public SimpleRenderer Renderer
         {
             get { return renderer; }
