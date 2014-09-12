@@ -14,6 +14,11 @@ namespace EngineCore.Graphics
         private Device device;
         private DeviceContext deviceContext;
         private Vector3 direction;
+        public Vector3 Direction
+        {
+            get { return direction; }
+            set { direction = value; }
+        }
         private Color4f diffuseColor;
         private SharpDX.Direct3D11.Buffer lightMatrixBuffer;
 
@@ -21,7 +26,7 @@ namespace EngineCore.Graphics
         {
             this.device = device;
             this.deviceContext = deviceContext;
-            this.direction = direction;
+            this.direction = Vector3.Normalize(direction);
             this.diffuseColor = color;
             this.lightMatrixBuffer = new SharpDX.Direct3D11.Buffer(
                 device,
@@ -36,13 +41,12 @@ namespace EngineCore.Graphics
         public void SetLightBuffer()
         {
             var lightBuffer = new LightBuffer(diffuseColor, direction);
-
             deviceContext.UpdateSubresource<LightBuffer>(ref lightBuffer, lightMatrixBuffer);
             deviceContext.PixelShader.SetConstantBuffer(0, lightMatrixBuffer);
         }
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack=16)]
+    [StructLayout(LayoutKind.Sequential, Pack = 16)]
     internal struct LightBuffer
     {
         Color4f diffuseColor;

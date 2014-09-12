@@ -35,7 +35,7 @@ namespace EngineCore.Graphics
 
         }
 
-        internal Matrix4x4 GetProjectionMatrix()
+        public Matrix4x4 GetProjectionMatrix()
         {
             switch (this.projectionType)
             {

@@ -83,17 +83,15 @@ namespace EngineCore.Entities
                     20,21,22,20,22,23
                 };
 
-        private static readonly InputElement[] defaultCubeShaderInputs = new InputElement[]
-                {
-                    new InputElement("Position", 0, Format.R32G32B32_Float, SimpleVertex.PositionOffset, 0),
-                    new InputElement("Normal", 0, Format.R32G32B32_Float, SimpleVertex.NormalOffset, 0),
-                    new InputElement("Color", 0, Format.R32G32B32A32_Float, SimpleVertex.ColorOffset, 0)
-                };
-
         protected override void Initialize(SharpDxGraphicsSystem system)
         {
-            this.shader = ShaderCache.GetNewOrCachedShader(system.Renderer.Device, system.Renderer.DeviceContext, Resources.LightShader, "VS", "PS",
-                defaultCubeShaderInputs);
+            this.shader = ShaderCache.GetNewOrCachedShader(
+                system.Renderer.Device, 
+                system.Renderer.DeviceContext, 
+                Resources.LightShader, 
+                "VS", 
+                "PS",
+                SimpleVertex.VertexInputLayout);
 
             this.cubeMesh = new PolyMesh(system.Renderer.Device,
                 cubeVertices,

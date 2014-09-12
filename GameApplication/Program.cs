@@ -3,6 +3,7 @@ using EngineCore.Behaviours;
 using EngineCore.Entities;
 using EngineCore.Graphics;
 using EngineCore.Physics;
+using GameApplication.Behaviours;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,14 @@ namespace GameApplication
 
             private void AddStartingStuff()
             {
-                this.GraphicsSystem.Renderer.Light = new DirectionalLight(GraphicsSystem.Renderer.Device, GraphicsSystem.Renderer.DeviceContext, new Vector3(0.1f, -.3f, 1.0f), new Color4f(1, 1, 1, 1));
+                this.GraphicsSystem.Renderer.Light = new DirectionalLight(
+                    GraphicsSystem.Renderer.Device, 
+                    GraphicsSystem.Renderer.DeviceContext, 
+                    new Vector3(.25f, -1f, 0f), 
+                    new Color4f(1, 1, 1, 1));
+
+                var lightRotationObject = new GameObject();
+                lightRotationObject.AddComponent(new LightRotator(this.GraphicsSystem.Renderer.Light));
 
                 var character = new GameObject();
                 character.AddComponent<CharacterController>();

@@ -21,7 +21,6 @@ namespace EngineCore.Graphics
 
         private SimpleText textRenderer;
         private Stopwatch stopwatch;
-        private string fontName = "Fonts/textfont.dds";
 
         private double FramesPerSecond
         {

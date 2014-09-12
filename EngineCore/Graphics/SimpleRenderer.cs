@@ -302,7 +302,11 @@ namespace EngineCore.Graphics
 
         internal void SetWorldMatrix(Matrix4x4 worldMatrix)
         {
-            MatricesBuffer matricesBuffer = new MatricesBuffer(ref worldMatrix, ref viewMatrix, ref projectionMatrix);
+            var worldTransposed = Matrix4x4.Transpose(worldMatrix);
+            var viewTransposed = Matrix4x4.Transpose(viewMatrix);
+            var projectionTransposed = Matrix4x4.Transpose(projectionMatrix);
+
+            MatricesBuffer matricesBuffer = new MatricesBuffer(ref worldTransposed, ref viewTransposed, ref projectionTransposed);
             deviceContext.UpdateSubresource<MatricesBuffer>(ref matricesBuffer, this.worldViewProjectionMatrixBuffer);
             deviceContext.VertexShader.SetConstantBuffer(0, this.worldViewProjectionMatrixBuffer);
         }
