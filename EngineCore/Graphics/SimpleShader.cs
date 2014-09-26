@@ -36,6 +36,19 @@ namespace EngineCore.Graphics
             this.inputLayout = new InputLayout(device, shaderSignature, inputElements);
         }
 
+        public SimpleShader(Device device, DeviceContext context, ShaderBytecode compiledByteCode, InputElement[] inputElements)
+        {
+            this.device = device;
+            this.deviceContext = deviceContext;
+            ShaderFlags shaderFlags = ShaderFlags.None;
+#if DEBUG
+            shaderFlags |= ShaderFlags.Debug | ShaderFlags.SkipOptimization;
+#endif
+
+            var shaderSignature = ShaderSignature.GetInputSignature(compiledByteCode);
+            this.inputLayout = new InputLayout(device, shaderSignature, inputElements);
+        }
+
         /// <summary>
         /// Applies this shader by setting the input layout, vertex shader, and pixel shader.
         /// </summary>

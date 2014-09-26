@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Numerics;
 using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 
@@ -24,6 +25,14 @@ namespace EngineCore.Graphics
             this.__packing = 0f;
         }
 
+        public unsafe Vector4 GetPositionAsVector4()
+        {
+            fixed (SimpleVertex* basePtr = &this)
+            {
+                return *((Vector4*)basePtr);
+            }
+        }
+
         // Fields for use in an InputLayout struct.
 
         public static readonly int PositionOffset = 0;
@@ -34,9 +43,9 @@ namespace EngineCore.Graphics
 
         public static readonly InputElement[] VertexInputLayout = new InputElement[]
         {
-            new InputElement("Position", 0, Format.R32G32B32A32_Float, PositionOffset, 0),
-            new InputElement("Normal", 0, Format.R32G32B32_Float, NormalOffset, 0),
-            new InputElement("Color", 0, Format.R32G32B32A32_Float, ColorOffset, 0)
+            new InputElement("Position",    0,      Format.R32G32B32A32_Float,  PositionOffset, 0),
+            new InputElement("Normal",      0,      Format.R32G32B32_Float,     NormalOffset,   0),
+            new InputElement("Color",       0,      Format.R32G32B32A32_Float,  ColorOffset,    0)
         };
     }
 }
