@@ -13,36 +13,38 @@ namespace EngineCore.Graphics
 {
     public class Camera : Component<SharpDxGraphicsSystem>
     {
-        private ProjectionType projectionType = ProjectionType.Perspective;
-        public Vector3 Position { get { return Transform.Position; } }
-        public Vector3 Forward { get { return Transform.Forward; } }
-        public Vector3 Up { get { return Transform.Up; } }
-        public Vector3 Right { get { return Transform.Right; } }
-
-        internal Matrix4x4 GetViewMatrix()
+        public ProjectionType ProjectionType
         {
-            var lookAt = this.Position + this.Forward;
-            return MathUtil.CreateLookAtLH(this.Position, lookAt, this.Up);
+            get { return projectionType; }
+            set { projectionType = value; }
         }
+
+        private ProjectionType projectionType = ProjectionType.Perspective;
+        private SharpDX.Windows.RenderForm renderForm;
 
         protected override void Initialize(SharpDxGraphicsSystem system)
         {
             system.SetCamera(this);
+            this.renderForm = system.Renderer.Form;
         }
 
-        protected override void Uninitialize(SharpDxGraphicsSystem system)
-        {
+        protected override void Uninitialize(SharpDxGraphicsSystem system) { }
 
+        public Matrix4x4 GetViewMatrix()
+        {
+            var lookAt = this.Transform.Position + this.Transform.Forward;
+            return MathUtil.CreateLookAtLH(this.Transform.Position, lookAt, this.Transform.Up);
         }
 
         public Matrix4x4 GetProjectionMatrix()
         {
+            float windowRatio = (float)renderForm.ClientRectangle.Width / (float)renderForm.ClientRectangle.Height;
             switch (this.projectionType)
             {
                 case ProjectionType.Perspective:
-                    return MathUtil.CreatePerspectiveFovLH(90, 1.0f, .5f, 1000f);
+                    return MathUtil.CreatePerspectiveFovLH(1.05f, windowRatio, 0.1f, 1000.0f);
                 case ProjectionType.Orthographic:
-                    return MathUtil.CreateOrthographic(10, 10, .5f, 1000f);
+                    return MathUtil.CreateOrthographic(10, 10, .03f, 1000f);
                 default:
                     throw new InvalidOperationException("Can't use ProjectionType value: " + this.projectionType);
             }

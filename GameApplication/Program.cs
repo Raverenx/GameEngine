@@ -73,6 +73,7 @@ namespace GameApplication
                 camera.AddComponent<BoxLauncher>();
                 var fpsLookController = camera.AddComponent<FpsLookController>();
                 fpsLookController.Tracked = character.Transform;
+                camera.AddComponent<CameraProjectionSwitcher>();
 
                 var box = GameObject.CreateBox(3.0f, 3.0f, 3.0f, 6f);
                 box.Transform.Position = new Vector3(0, 5, 15);

@@ -136,6 +136,7 @@
     <Compile Include="Behaviours\Behaviour.cs" />
     <Compile Include="Behaviours\BoxLauncher.cs" />
     <Compile Include="Behaviours\CameraMovementController.cs" />
+    <Compile Include="Behaviours\CameraProjectionSwitcher.cs" />
     <Compile Include="Behaviours\FpsLookController.cs" />
     <Compile Include="Behaviours\LightRotator.cs" />
     <Compile Include="Behaviours\SimpleFpsController.cs" />
