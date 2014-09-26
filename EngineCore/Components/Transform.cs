@@ -114,5 +114,8 @@ namespace EngineCore.Components
             this.position = obj.Position.ToSimdVector();
             this.rotation = obj.Orientation.ToSimdQuaternion();
         }
+
+        protected internal override void Initialize(GameSystem system) { }
+        protected internal override void Uninitialize(GameSystem system) { }
     }
 }

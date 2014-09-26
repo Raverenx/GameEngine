@@ -17,35 +17,57 @@ namespace EngineCore.Graphics
         private PixelShader pixelShader;
         private InputLayout inputLayout;
 
-        public SimpleShader(Device device, DeviceContext deviceContext, string fileName, string vsEntryPoint, string psEntryPoint, InputElement[] inputElements)
+        private const ShaderFlags defaultShaderFlags
+#if DEBUG
+ = ShaderFlags.Debug | ShaderFlags.SkipOptimization;
+#else
+            = ShaderFlags.None;
+#endif
+
+        public SimpleShader(
+            Device device,
+            DeviceContext deviceContext,
+            string fileName,
+            string vsEntryPoint,
+            string psEntryPoint,
+            InputElement[] inputElements)
+        {
+            var compiledVertexShader = ShaderBytecode.CompileFromFile(fileName, vsEntryPoint, "vs_5_0", defaultShaderFlags);
+            var compiledPixelShader = ShaderBytecode.CompileFromFile(fileName, psEntryPoint, "ps_5_0", defaultShaderFlags);
+            CoreInitialize(device, deviceContext, compiledVertexShader, compiledPixelShader, inputElements);
+        }
+
+        public SimpleShader(
+            Device device,
+            DeviceContext context,
+            string compiledVertexShaderFileName,
+            string compiledPixelShaderFileName,
+            InputElement[] inputElements)
+        {
+            var compiledVertexShader = ShaderBytecode.FromFile(compiledVertexShaderFileName);
+            var compiledPixelShader = ShaderBytecode.FromFile(compiledPixelShaderFileName);
+            CoreInitialize(device, context, compiledVertexShader, compiledPixelShader, inputElements);
+        }
+
+        public SimpleShader(
+            Device device,
+            DeviceContext deviceContext,
+            ShaderBytecode compiledVertexShader,
+            ShaderBytecode compiledPixelShader,
+            InputElement[] inputElements)
+        {
+            CoreInitialize(device, deviceContext, compiledVertexShader, compiledPixelShader, inputElements);
+        }
+
+        private void CoreInitialize(Device device, DeviceContext deviceContext, ShaderBytecode compiledVertexShader, ShaderBytecode compiledPixelShader, InputElement[] inputElements)
         {
             this.device = device;
             this.deviceContext = deviceContext;
-            ShaderFlags shaderFlags = ShaderFlags.None;
-#if DEBUG
-            shaderFlags |= ShaderFlags.Debug | ShaderFlags.SkipOptimization;
-#endif
-
-            var compiledVertexShader = ShaderBytecode.CompileFromFile(fileName, vsEntryPoint, "vs_5_0", shaderFlags);
-            var compiledPixelShader = ShaderBytecode.CompileFromFile(fileName, psEntryPoint, "ps_5_0", shaderFlags);
 
             this.vertexShader = new VertexShader(device, compiledVertexShader);
             this.pixelShader = new PixelShader(device, compiledPixelShader);
 
             var shaderSignature = ShaderSignature.GetInputSignature(compiledVertexShader);
-            this.inputLayout = new InputLayout(device, shaderSignature, inputElements);
-        }
-
-        public SimpleShader(Device device, DeviceContext context, ShaderBytecode compiledByteCode, InputElement[] inputElements)
-        {
-            this.device = device;
-            this.deviceContext = deviceContext;
-            ShaderFlags shaderFlags = ShaderFlags.None;
-#if DEBUG
-            shaderFlags |= ShaderFlags.Debug | ShaderFlags.SkipOptimization;
-#endif
-
-            var shaderSignature = ShaderSignature.GetInputSignature(compiledByteCode);
             this.inputLayout = new InputLayout(device, shaderSignature, inputElements);
         }
 

@@ -23,6 +23,8 @@ namespace EngineCore.Graphics
         RenderForm renderForm;
         public RenderForm Form { get { return renderForm; } }
 
+        public event Action FormClosing;
+
         DeviceContext deviceContext;
         public DeviceContext DeviceContext { get { return deviceContext; } }
 
@@ -60,6 +62,8 @@ namespace EngineCore.Graphics
         private SharpDX.Direct3D11.Buffer ambientLightBuffer;
         private Color4f ambientColor;
         private SharpDX.Toolkit.Graphics.GraphicsDevice __2dGraphicsDevice;
+        private Delegate onRenderingDelegate;
+        private bool needsResizing = false;
         public Color4f AmbientColor
         {
             get { return ambientColor; }
@@ -88,6 +92,10 @@ namespace EngineCore.Graphics
 #if TEXT_RENDERER
             this.TextRenderer = new SimpleText(this.Get2DGraphicsDevice(), "Fonts/textfont.dds");
 #endif
+
+            var onRenderingMethodInfo = typeof(SimpleRenderer)
+                .GetMethod("OnRendering", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            this.onRenderingDelegate = Delegate.CreateDelegate(typeof(Action), this, onRenderingMethodInfo);
         }
         private void CreateAndInitializeDevice()
         {
@@ -118,8 +126,9 @@ namespace EngineCore.Graphics
             SetSamplerState();
             SetBlendState();
             CreateConstantBuffers();
-            renderForm.Resize += (sender, e) => OnResized();
-            OnResized();
+            renderForm.Resize += (sender, e) => OnFormResized();
+            renderForm.FormClosing += RenderForm_OnFormClosing;
+            OnFormResized();
             SetRegularTargets();
         }
 
@@ -191,21 +200,13 @@ namespace EngineCore.Graphics
             DeviceContext.PixelShader.SetSampler(0, samplerState);
         }
 
-        public void StartRenderLoop()
-        {
-            RenderLoop.Run(renderForm, OnRendering);
-        }
-
-        private void OnKeyPressed(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            if (e.KeyCode == System.Windows.Forms.Keys.Escape)
-            {
-                renderForm.Close();
-            }
-        }
-
         private void OnRendering()
         {
+            if (needsResizing)
+            {
+                PerformResizing();
+            }
+
             SetAllDeviceStates();
             Clear(Color.CornflowerBlue);
 
@@ -257,7 +258,12 @@ namespace EngineCore.Graphics
             DeviceContext.ClearDepthStencilView(depthStencilView, DepthStencilClearFlags.Depth, 1.0f, 0);
         }
 
-        private void OnResized()
+        private void OnFormResized()
+        {
+            this.needsResizing = true;
+        }
+
+        private void PerformResizing()
         {
             if (backBufferView != null)
             {
@@ -284,8 +290,8 @@ namespace EngineCore.Graphics
                 Format = Format.D16_UNorm,
                 ArraySize = 1,
                 MipLevels = 1,
-                Width = renderForm.ClientSize.Width,
-                Height = renderForm.ClientSize.Height,
+                Width = Math.Max(1, renderForm.ClientSize.Width),
+                Height = Math.Max(1, renderForm.ClientSize.Height),
                 SampleDescription = new SampleDescription(1, 0),
                 Usage = ResourceUsage.Default,
                 BindFlags = BindFlags.DepthStencil,
@@ -298,6 +304,17 @@ namespace EngineCore.Graphics
             }
 
             SetRegularTargets();
+
+            this.needsResizing = false;
+        }
+
+        private void RenderForm_OnFormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            Debug.WriteLine("Closing detected.");
+            if (this.FormClosing != null)
+            {
+                this.FormClosing();
+            }
         }
 
         internal void SetWorldMatrix(Matrix4x4 worldMatrix)
@@ -314,6 +331,7 @@ namespace EngineCore.Graphics
         internal void RenderFrame()
         {
             this.OnRendering();
+            //Form.Invoke(onRenderingDelegate);
         }
 
         internal SharpDX.Toolkit.Graphics.GraphicsDevice Get2DGraphicsDevice()

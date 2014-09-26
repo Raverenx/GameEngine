@@ -20,7 +20,6 @@ namespace EngineCore.Physics
             system.AddOject(bepuController);
             bepuController.Body.PositionUpdated += Transform.OnPhysicsUpdate;
         }
-
         public void SetMotionDirection(Vector2 motion)
         {
             bepuController.HorizontalMotionConstraint.MovementDirection = motion.ToBepuVector();

@@ -30,6 +30,11 @@ namespace EngineCore
             {
                 GameObjectConstructed(this);
             }
+            else
+            {
+                throw new InvalidOperationException(
+                    "GameObjectConstructed callback has not been properly initialized before attempting to construct GameObjects.");
+            }
         }
 
         public static event Action<GameObject> GameObjectConstructed;
@@ -88,7 +93,7 @@ namespace EngineCore
             {
                 system = game.GetSystem(dependencyType);
             }
-            component.Initialize(this, system);
+            component.CoreInitialize(this, system);
         }
 
         private void UninitializeSingleComponent(Game game, Component component)
@@ -99,7 +104,7 @@ namespace EngineCore
             {
                 system = game.GetSystem(dependencyType);
             }
-            component.Uninitialize(this, system);
+            component.Uninitialize(system);
         }
 
         public static GameObject CreateBox(float width, float height, float depth, float mass = 1.0f)

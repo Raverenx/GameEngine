@@ -23,8 +23,8 @@ namespace EngineCore.Graphics
             get { return renderer; }
             set { renderer = value; }
         }
-
         private Thread thread;
+        private bool active;
         public SharpDxGraphicsSystem(Game game)
             : base(game)
         {
@@ -37,6 +37,7 @@ namespace EngineCore.Graphics
             renderer.Form.MouseDown += OnMouseDown;
             renderer.Form.FormClosing += OnFormClosing;
             renderer.Renderables = new List<IRenderable>();
+            this.active = true;
             Application.Run(renderer.Form);
         }
 
@@ -60,7 +61,10 @@ namespace EngineCore.Graphics
 
         public override void Update()
         {
-            renderer.RenderFrame();
+            if (this.active)
+            {
+                renderer.RenderFrame();
+            }
         }
 
         public override void Start()
@@ -74,6 +78,8 @@ namespace EngineCore.Graphics
 
         public override void Stop()
         {
+            Debug.WriteLine("Stopping SharpDxGraphicsSystem");
+            this.active = false;
 
         }
 

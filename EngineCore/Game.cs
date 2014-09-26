@@ -46,7 +46,7 @@ namespace EngineCore
             this.Systems.Add(graphicsSystem);
             this.Systems.Add(new InputSystem(this));
 
-            GameObject.GameObjectConstructed += AddGameObject;
+            GameObject.GameObjectConstructed += AddGameObject; // This is absolutely required
         }
 
         public void Start()
