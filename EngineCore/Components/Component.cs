@@ -24,18 +24,18 @@ namespace EngineCore.Components
         /// Obtains the system type which this Component is dependent on.
         /// </summary>
         /// <returns></returns>
-        internal virtual Type GetDependency() { return null; }
+        internal virtual IEnumerable<Type> GetDependencies() { return null; }
 
-        internal void CoreInitialize(GameObject gameObject, GameSystem system)
+        internal void CoreInitialize(GameObject gameObject, IEnumerable<GameSystem> systems)
         {
             this.GameObject = gameObject;
             this.Transform = gameObject.Transform;
 
-            this.Initialize(system);
+            this.Initialize(systems);
         }
 
-        protected internal abstract void Initialize(GameSystem system);
-        protected internal abstract void Uninitialize(GameSystem system);
+        protected internal abstract void Initialize(IEnumerable<GameSystem> systems);
+        protected internal abstract void Uninitialize(IEnumerable<GameSystem> systems);
     }
 
     /// <summary>
@@ -44,19 +44,49 @@ namespace EngineCore.Components
     /// <typeparam name="TSystem">The type of dependency.</typeparam>
     public abstract class Component<TSystem> : Component where TSystem : GameSystem
     {
-        internal override Type GetDependency() { return typeof(TSystem); }
+        internal override IEnumerable<Type> GetDependencies() { yield return typeof(TSystem); }
 
-        protected internal override sealed void Initialize(GameSystem system)
+        protected internal override sealed void Initialize(IEnumerable<GameSystem> systems)
         {
-            this.Initialize((TSystem)system);
+            this.Initialize((TSystem)systems.First());
         }
 
-        protected internal override sealed void Uninitialize(GameSystem system)
+        protected internal override sealed void Uninitialize(IEnumerable<GameSystem> systems)
         {
-            this.Uninitialize((TSystem)system);
+            this.Uninitialize((TSystem)systems.First());
         }
 
         protected abstract void Initialize(TSystem system);
         protected abstract void Uninitialize(TSystem system);
+    }
+
+    public abstract class Component<TSystem1, TSystem2> : Component
+        where TSystem1 : GameSystem
+        where TSystem2 : GameSystem
+    {
+        internal override IEnumerable<Type> GetDependencies()
+        {
+            yield return typeof(TSystem1);
+            yield return typeof(TSystem2);
+        }
+
+        protected internal override void Initialize(IEnumerable<GameSystem> systems)
+        {
+            TSystem1 system1 = (TSystem1)systems.Single(gs => gs.GetType() == typeof(TSystem1));
+            TSystem2 system2 = (TSystem2)systems.Single(gs => gs.GetType() == typeof(TSystem2));
+
+            this.Initialize(system1, system2);
+        }
+
+        protected internal override void Uninitialize(IEnumerable<GameSystem> systems)
+        {
+            TSystem1 system1 = (TSystem1)systems.Single(gs => gs.GetType() == typeof(TSystem1));
+            TSystem2 system2 = (TSystem2)systems.Single(gs => gs.GetType() == typeof(TSystem2));
+
+            this.Uninitialize(system1, system2);
+        }
+
+        protected abstract void Initialize(TSystem1 system1, TSystem2 system2);
+        protected abstract void Uninitialize(TSystem1 system1, TSystem2 system2);
     }
 }

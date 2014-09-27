@@ -16,25 +16,55 @@ namespace EngineCore.Graphics
         private Matrix4x4 viewMatrix;
         private Matrix4x4 projectionMatrix;
         private float fieldOfViewRadians = 1.05f;
+        private ProjectionType projectionType = ProjectionType.Perspective;
+        private SharpDX.Windows.RenderForm renderForm;
 
+        /// <summary>
+        /// Gets or sets the field of view angle, in radians.
+        /// </summary>
         public float FieldOfViewRadians
         {
             get { return fieldOfViewRadians; }
             set
             {
                 fieldOfViewRadians = value;
+                if (projectionType == global::ProjectionType.Perspective)
+                {
+                    RecalculateProjectionMatrix();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the camera's projection type.
+        /// </summary>
+        public ProjectionType ProjectionType
+        {
+            get { return projectionType; }
+            set
+            {
+                projectionType = value;
                 RecalculateProjectionMatrix();
             }
         }
 
-        public ProjectionType ProjectionType
+        /// <summary>
+        /// Gets the current view matrix, based on the orientation of the camera.
+        /// </summary>
+        /// <returns></returns>
+        public Matrix4x4 GetViewMatrix()
         {
-            get { return projectionType; }
-            set { projectionType = value; }
+            return viewMatrix;
         }
 
-        private ProjectionType projectionType = ProjectionType.Perspective;
-        private SharpDX.Windows.RenderForm renderForm;
+        /// <summary>
+        /// Gets the current projection matrix, based on camera settings.
+        /// </summary>
+        /// <returns></returns>
+        public Matrix4x4 GetProjectionMatrix()
+        {
+            return projectionMatrix;
+        }
 
         protected override void Initialize(SharpDxGraphicsSystem system)
         {
@@ -83,16 +113,6 @@ namespace EngineCore.Graphics
         private void OnTransformPositionChanged(Vector3 obj)
         {
             RecalculateViewMatrix();
-        }
-
-        public Matrix4x4 GetViewMatrix()
-        {
-            return viewMatrix;
-        }
-
-        public Matrix4x4 GetProjectionMatrix()
-        {
-            return projectionMatrix;
         }
     }
 }

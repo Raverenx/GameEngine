@@ -1,4 +1,5 @@
-﻿using EngineCore.Behaviours;
+﻿using EngineCore;
+using EngineCore.Behaviours;
 using EngineCore.Components;
 using EngineCore.Graphics;
 using EngineCore.Input;
@@ -10,13 +11,23 @@ using System.Threading.Tasks;
 
 namespace GameApplication.Behaviours
 {
-    public class CameraProjectionSwitcher : Component<SharpDxGraphicsSystem>
+    public class CameraProjectionSwitcher : Behaviour<SharpDxGraphicsSystem>
     {
+        private System.Windows.Forms.Keys key = System.Windows.Forms.Keys.P;
         private SharpDxGraphicsSystem system;
+
         protected override void Initialize(SharpDxGraphicsSystem system)
         {
             this.system = system;
-            this.GameObject.AddComponent<CameraProjectionInputMonitor>();
+        }
+
+        protected override void Update()
+        {
+            if (InputSystem.GetKeyDown(key))
+            {
+                System.Diagnostics.Debug.WriteLine("Detected key.");
+                SwitchProjectionType();
+            }
         }
 
         public void SwitchProjectionType()
@@ -31,22 +42,6 @@ namespace GameApplication.Behaviours
             }
         }
 
-        protected override void Uninitialize(SharpDxGraphicsSystem system)
-        {
-        }
-
-        private class CameraProjectionInputMonitor : Behaviour
-        {
-            private System.Windows.Forms.Keys key = System.Windows.Forms.Keys.P;
-
-            protected override void Update()
-            {
-                if (InputSystem.GetKeyDown(key))
-                {
-                    System.Diagnostics.Debug.WriteLine("Detected key.");
-                    this.GameObject.GetComponent<CameraProjectionSwitcher>().SwitchProjectionType();
-                }
-            }
-        }
+        protected override void Uninitialize(SharpDxGraphicsSystem system) { }
     }
 }

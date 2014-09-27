@@ -130,9 +130,9 @@ namespace EngineCore
             this.running = false;
         }
 
-        internal GameSystem GetSystem(Type dependencyType)
+        internal IEnumerable<GameSystem> GetSystems(IEnumerable<Type> dependencyTypes)
         {
-            return this.Systems.Single(sys => sys.GetType() == dependencyType);
+            return this.Systems.Where(gs => dependencyTypes.Contains(gs.GetType()));
         }
     }
 }

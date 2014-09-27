@@ -87,24 +87,24 @@ namespace EngineCore
 
         private void InitializeSingleComponent(Game game, Component component)
         {
-            GameSystem system = null;
-            Type dependencyType = component.GetDependency();
-            if (dependencyType != null)
+            IEnumerable<GameSystem> systems = null;
+            IEnumerable<Type> dependencyTypes = component.GetDependencies();
+            if (dependencyTypes != null)
             {
-                system = game.GetSystem(dependencyType);
+                systems = game.GetSystems(dependencyTypes);
             }
-            component.CoreInitialize(this, system);
+            component.CoreInitialize(this, systems);
         }
 
         private void UninitializeSingleComponent(Game game, Component component)
         {
-            GameSystem system = null;
-            Type dependencyType = component.GetDependency();
-            if (dependencyType != null)
+            IEnumerable<GameSystem> systems = null;
+            IEnumerable<Type> dependencyTypes = component.GetDependencies();
+            if (dependencyTypes != null)
             {
-                system = game.GetSystem(dependencyType);
+                systems = game.GetSystems(dependencyTypes);
             }
-            component.Uninitialize(system);
+            component.Uninitialize(systems);
         }
 
         public static GameObject CreateBox(float width, float height, float depth, float mass = 1.0f)

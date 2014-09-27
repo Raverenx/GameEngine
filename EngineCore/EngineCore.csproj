@@ -130,6 +130,7 @@
   <ItemGroup>
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\Transform.cs" />
+    <Compile Include="Entities\Behaviour.cs" />
     <Compile Include="Graphics\ShaderCache.cs" />
     <Compile Include="Graphics\SimpleText.cs" />
     <Compile Include="Input\InputSystem.cs" />
