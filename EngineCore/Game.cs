@@ -1,15 +1,16 @@
 ﻿using EngineCore.Entities;
 using EngineCore.Graphics;
+using EngineCore.Input;
+using EngineCore.Physics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Numerics;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using EngineCore.Physics;
-using EngineCore.Input;
+
+#if USE_SLEEP0 && USE_THREADYIELD
+#error USE_SLEEP0 and USE_THREADYIELD are mutually exclusive, define only one.
+#endif
 
 namespace EngineCore
 {
@@ -102,20 +103,26 @@ namespace EngineCore
             double sleepTime = desiredFrameLength - elapsed;
             if (sleepTime > 0.0)
             {
-#if USE_SLEEP0
+#if USE_THREADYIELD || USE_SLEEP0
                 DateTime finishTime = afterFrameTime + TimeSpan.FromSeconds(sleepTime);
                 while (DateTime.UtcNow < finishTime)
                 {
-                    while (Thread.Yield()) { } // This can't be right
+#if USE_THREADYIELD
+                    Thread.Yield();
+#elif USE_SLEEP0
+                    Thread.Sleep(0);
+#endif
                 }
 #else
                 Thread.Sleep((int)(sleepTime * 1000));
 #endif
             }
+#if MONITOR_SLOWRUNNING
             else
             {
                 Debug.WriteLine("Running slowly, no sleep time.");
             }
+#endif
         }
 
         internal void Exit()

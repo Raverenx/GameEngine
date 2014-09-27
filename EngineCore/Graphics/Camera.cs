@@ -13,6 +13,20 @@ namespace EngineCore.Graphics
 {
     public class Camera : Component<SharpDxGraphicsSystem>
     {
+        private Matrix4x4 viewMatrix;
+        private Matrix4x4 projectionMatrix;
+        private float fieldOfViewRadians = 1.05f;
+
+        public float FieldOfViewRadians
+        {
+            get { return fieldOfViewRadians; }
+            set
+            {
+                fieldOfViewRadians = value;
+                RecalculateProjectionMatrix();
+            }
+        }
+
         public ProjectionType ProjectionType
         {
             get { return projectionType; }
@@ -26,28 +40,59 @@ namespace EngineCore.Graphics
         {
             system.SetCamera(this);
             this.renderForm = system.Renderer.Form;
+            this.renderForm.Resize += OnFormResized;
+            this.Transform.PositionChanged += OnTransformPositionChanged;
+            this.Transform.RotationChanged += OnTransformRotationChanged;
+            this.RecalculateViewMatrix();
+            this.RecalculateProjectionMatrix();
         }
 
         protected override void Uninitialize(SharpDxGraphicsSystem system) { }
 
-        public Matrix4x4 GetViewMatrix()
+        private void OnFormResized(object sender, EventArgs e)
+        {
+            RecalculateProjectionMatrix();
+        }
+
+        private void RecalculateViewMatrix()
         {
             var lookAt = this.Transform.Position + this.Transform.Forward;
-            return MathUtil.CreateLookAtLH(this.Transform.Position, lookAt, this.Transform.Up);
+            this.viewMatrix = MathUtil.CreateLookAtLH(this.Transform.Position, lookAt, this.Transform.Up);
+        }
+
+        private void RecalculateProjectionMatrix()
+        {
+            float windowRatio = (float)renderForm.ClientRectangle.Width / (float)renderForm.ClientRectangle.Height;
+
+            switch (this.projectionType)
+            {
+                case ProjectionType.Perspective:
+                    this.projectionMatrix = MathUtil.CreatePerspectiveFovLH(fieldOfViewRadians, windowRatio, 0.1f, 1000.0f);
+                    break;
+                case ProjectionType.Orthographic:
+                    this.projectionMatrix = MathUtil.CreateOrthographic(10, 10, .03f, 1000f);
+                    break;
+            }
+        }
+
+        private void OnTransformRotationChanged(Quaternion obj)
+        {
+            RecalculateViewMatrix();
+        }
+
+        private void OnTransformPositionChanged(Vector3 obj)
+        {
+            RecalculateViewMatrix();
+        }
+
+        public Matrix4x4 GetViewMatrix()
+        {
+            return viewMatrix;
         }
 
         public Matrix4x4 GetProjectionMatrix()
         {
-            float windowRatio = (float)renderForm.ClientRectangle.Width / (float)renderForm.ClientRectangle.Height;
-            switch (this.projectionType)
-            {
-                case ProjectionType.Perspective:
-                    return MathUtil.CreatePerspectiveFovLH(1.05f, windowRatio, 0.1f, 1000.0f);
-                case ProjectionType.Orthographic:
-                    return MathUtil.CreateOrthographic(10, 10, .03f, 1000f);
-                default:
-                    throw new InvalidOperationException("Can't use ProjectionType value: " + this.projectionType);
-            }
+            return projectionMatrix;
         }
     }
 }

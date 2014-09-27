@@ -20,50 +20,44 @@ namespace EngineCore.Graphics
 {
     public class SimpleRenderer
     {
-        RenderForm renderForm;
-        public RenderForm Form { get { return renderForm; } }
-
-        public event Action FormClosing;
-
-        DeviceContext deviceContext;
-        public DeviceContext DeviceContext { get { return deviceContext; } }
-
-        private SwapChain swapChain;
-        public SwapChain SwapChain { get { return swapChain; } }
-
+        #region Private Fields
+        // Direct3D Device and State Objects
         private SharpDX.Direct3D11.Device device;
-        public SharpDX.Direct3D11.Device Device { get { return device; } }
-
+        private DeviceContext deviceContext;
+        private SharpDX.Toolkit.Graphics.GraphicsDevice __2dGraphicsDevice;
+        private SwapChain swapChain;
         private RenderTargetView backBufferView;
         private DepthStencilView depthStencilView;
         private DepthStencilState depthState;
         private SamplerState samplerState;
         private BlendState blendState;
         private RasterizerState rasterizerState;
-#if TEXT_RENDERER
-        public SimpleText TextRenderer { get; private set; }
-#endif
 
-        private Camera camera;
-        public Camera MainCamera
-        {
-            get { return camera; }
-            set { camera = value; }
-        }
-
+        // Matrix Objects
         private SharpDX.Direct3D11.Buffer worldViewProjectionMatrixBuffer;
         private Matrix4x4 projectionMatrix;
         private Matrix4x4 viewMatrix;
 
-        public List<IRenderable> Renderables { get; set; }
-        public DirectionalLight Light { get; set; }
-
         // Ambient Color Properties
         private SharpDX.Direct3D11.Buffer ambientLightBuffer;
         private Color4f ambientColor;
-        private SharpDX.Toolkit.Graphics.GraphicsDevice __2dGraphicsDevice;
-        private Delegate onRenderingDelegate;
+
+        // Misc
+        private Camera camera;
+        private RenderForm renderForm;
         private bool needsResizing = false;
+
+        #endregion Private Fields
+
+        #region Public Accessors
+        public RenderForm Form { get { return renderForm; } }
+
+        public DeviceContext DeviceContext { get { return deviceContext; } }
+
+        public SwapChain SwapChain { get { return swapChain; } }
+
+        public SharpDX.Direct3D11.Device Device { get { return device; } }
+
         public Color4f AmbientColor
         {
             get { return ambientColor; }
@@ -73,13 +67,22 @@ namespace EngineCore.Graphics
                 OnAmbientColorChanged();
             }
         }
-        private void OnAmbientColorChanged()
+
+        public Camera MainCamera
         {
-            var bufferStruct = new AmbientLightBuffer(ambientColor);
-            deviceContext.UpdateSubresource<AmbientLightBuffer>(ref bufferStruct, ambientLightBuffer);
-            deviceContext.PixelShader.SetConstantBuffer(1, ambientLightBuffer);
+            get { return camera; }
+            set { camera = value; }
         }
 
+        public List<IRenderable> Renderables { get; set; }
+        public DirectionalLight Light { get; set; }
+
+#if TEXT_RENDERER
+        public SimpleText TextRenderer { get; private set; }
+#endif
+        #endregion Public Accessors
+
+        #region Constructor
         public SimpleRenderer()
         {
             string title = "SharpDX Renderer (SIMD " + (Vector.IsHardwareAccelerated ? "Enabled" : "Disabled") + ")";
@@ -92,10 +95,6 @@ namespace EngineCore.Graphics
 #if TEXT_RENDERER
             this.TextRenderer = new SimpleText(this.Get2DGraphicsDevice(), "Fonts/textfont.dds");
 #endif
-
-            var onRenderingMethodInfo = typeof(SimpleRenderer)
-                .GetMethod("OnRendering", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            this.onRenderingDelegate = Delegate.CreateDelegate(typeof(Action), this, onRenderingMethodInfo);
         }
         private void CreateAndInitializeDevice()
         {
@@ -126,10 +125,18 @@ namespace EngineCore.Graphics
             SetSamplerState();
             SetBlendState();
             CreateConstantBuffers();
-            renderForm.Resize += (sender, e) => OnFormResized();
-            renderForm.FormClosing += RenderForm_OnFormClosing;
-            OnFormResized();
+            renderForm.Resize += OnFormResized;
+            PerformResizing();
             SetRegularTargets();
+        }
+        #endregion Constructor
+
+        #region Private/Internal Implementation
+        private void OnAmbientColorChanged()
+        {
+            var bufferStruct = new AmbientLightBuffer(ambientColor);
+            deviceContext.UpdateSubresource<AmbientLightBuffer>(ref bufferStruct, ambientLightBuffer);
+            deviceContext.PixelShader.SetConstantBuffer(1, ambientLightBuffer);
         }
 
         private void CreateConstantBuffers()
@@ -244,7 +251,6 @@ namespace EngineCore.Graphics
 
         private void UpdateViewProjectionBuffers()
         {
-            float windowRatio = (float)renderForm.ClientRectangle.Width / (float)renderForm.ClientRectangle.Height;
             projectionMatrix = camera.GetProjectionMatrix();
             viewMatrix = camera.GetViewMatrix();
         }
@@ -258,7 +264,7 @@ namespace EngineCore.Graphics
             DeviceContext.ClearDepthStencilView(depthStencilView, DepthStencilClearFlags.Depth, 1.0f, 0);
         }
 
-        private void OnFormResized()
+        private void OnFormResized(object sender, EventArgs e)
         {
             this.needsResizing = true;
         }
@@ -308,15 +314,6 @@ namespace EngineCore.Graphics
             this.needsResizing = false;
         }
 
-        private void RenderForm_OnFormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
-        {
-            Debug.WriteLine("Closing detected.");
-            if (this.FormClosing != null)
-            {
-                this.FormClosing();
-            }
-        }
-
         internal void SetWorldMatrix(Matrix4x4 worldMatrix)
         {
             var worldTransposed = Matrix4x4.Transpose(worldMatrix);
@@ -331,15 +328,16 @@ namespace EngineCore.Graphics
         internal void RenderFrame()
         {
             this.OnRendering();
-            //Form.Invoke(onRenderingDelegate);
         }
 
         internal SharpDX.Toolkit.Graphics.GraphicsDevice Get2DGraphicsDevice()
         {
             return this.__2dGraphicsDevice;
         }
+        #endregion Private/Internal Implementation
     }
 
+    #region Shader Constant Buffer Definitions
     [StructLayout(LayoutKind.Sequential)]
     internal struct MatricesBuffer
     {
@@ -364,4 +362,5 @@ namespace EngineCore.Graphics
             this.AmbientColor = color;
         }
     }
+    #endregion Shader Constant Buffer Definitions
 }

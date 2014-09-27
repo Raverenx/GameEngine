@@ -30,8 +30,9 @@ namespace EngineCore.Physics
             space.Update(Time.DeltaTime);
         }
 
-        public void AddOject(ISpaceObject entity)
+        public void AddOject(ISpaceObject entity, GameObject gameObject)
         {
+            entity.Tag = gameObject;
             space.Add(entity);
         }
 
@@ -47,6 +48,11 @@ namespace EngineCore.Physics
 
         public override void Stop()
         {
+        }
+
+        public bool RayCast(BEPUutilities.Ray ray, out RayCastResult result)
+        {
+            return space.RayCast(ray, out result);
         }
     }
 }

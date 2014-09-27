@@ -74,8 +74,7 @@ namespace EngineCore.Physics
             this.Transform.RotationChanged += OnTransformRotationManuallyChanged;
 
             physicsBox.PositionUpdated += Transform.OnPhysicsUpdate;
-
-            system.AddOject(this.physicsBox);
+            system.AddOject(this.physicsBox, this.GameObject);
             OnTransformPositionManuallyChanged(this.Transform.Position);
             OnTransformRotationManuallyChanged(this.Transform.Rotation);
             OnScaleChanged(this.Transform.Scale);

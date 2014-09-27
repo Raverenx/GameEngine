@@ -26,7 +26,7 @@ namespace EngineCore.Physics
                     {
                         system.RemoveObject(old);
                     }
-                    system.AddOject(value);
+                    system.AddOject(value, this.GameObject);
                 }
 
                 value.PositionUpdated += Transform.OnPhysicsUpdate;
@@ -41,7 +41,7 @@ namespace EngineCore.Physics
             this.system = system;
             if (this.physicsEntity != null)
             {
-                system.AddOject(this.physicsEntity);
+                system.AddOject(this.physicsEntity, this.GameObject);
                 OnTransformPositionManuallyChanged(this.Transform.Position);
                 OnTransformRotationManuallyChanged(this.Transform.Rotation);
             }

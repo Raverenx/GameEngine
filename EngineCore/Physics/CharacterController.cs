@@ -17,7 +17,7 @@ namespace EngineCore.Physics
         }
         protected override void Initialize(BepuPhysicsSystem system)
         {
-            system.AddOject(bepuController);
+            system.AddOject(bepuController, this.GameObject);
             bepuController.Body.PositionUpdated += Transform.OnPhysicsUpdate;
         }
         public void SetMotionDirection(Vector2 motion)
