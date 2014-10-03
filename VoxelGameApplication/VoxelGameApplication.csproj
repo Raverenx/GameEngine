@@ -81,6 +81,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LibNoise">
+      <HintPath>..\EngineCore\refs\LibNoise\LibNoise.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX, Version=2.5.0.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\EngineCore\refs\SharpDX\SharpDX.dll</HintPath>
@@ -115,12 +118,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\EngineCore\refs\SharpDX\SharpDX.Toolkit.Graphics.dll</HintPath>
     </Reference>
-    <Reference Include="SharpNoise">
-      <HintPath>..\packages\SharpNoise.0.10.0.0\lib\net45\SharpNoise.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpNoise.Utilities">
-      <HintPath>..\packages\SharpNoise.0.10.0.0\lib\net45\SharpNoise.Utilities.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics.Vectors, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -150,9 +147,6 @@
       <Project>{c29c63ab-7cfb-4eaa-be26-9f225fb9e007}</Project>
       <Name>EngineCore</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
