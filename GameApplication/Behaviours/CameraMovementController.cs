@@ -74,11 +74,11 @@ namespace EngineCore.Behaviours
             }
             if (InputSystem.GetKey(Keys.A))
             {
-                movementDirection += Transform.Right;
+                movementDirection += -Transform.Right;
             }
             if (InputSystem.GetKey(Keys.D))
             {
-                movementDirection += -Transform.Right;
+                movementDirection += Transform.Right;
             }
             if (InputSystem.GetKey(Keys.E))
             {
