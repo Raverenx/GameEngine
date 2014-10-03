@@ -36,7 +36,6 @@ namespace EngineCore.Graphics
             renderer = new SimpleRenderer();
             renderer.Form.MouseDown += OnMouseDown;
             renderer.Form.FormClosing += OnFormClosing;
-            renderer.Renderables = new List<IRenderable>();
             this.active = true;
             Application.Run(renderer.Form);
         }
@@ -82,7 +81,6 @@ namespace EngineCore.Graphics
             this.active = false;
 
         }
-
 
         internal void SetCamera(Camera camera)
         {

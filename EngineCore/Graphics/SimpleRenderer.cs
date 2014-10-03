@@ -15,6 +15,7 @@ using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Matrix4x4 = System.Numerics.Matrix4x4;
 using EngineCore.Entities;
+using System.Collections.Immutable;
 
 namespace EngineCore.Graphics
 {
@@ -43,13 +44,14 @@ namespace EngineCore.Graphics
         private Color4f ambientColor;
 
         // Misc
+        private ImmutableArray<IRenderable> renderables;
         private Camera camera;
         private RenderForm renderForm;
         private bool needsResizing = false;
 
         #endregion Private Fields
 
-        #region Public Accessors
+        #region Public Accessors And Methods
         public RenderForm Form { get { return renderForm; } }
 
         public DeviceContext DeviceContext { get { return deviceContext; } }
@@ -74,13 +76,23 @@ namespace EngineCore.Graphics
             set { camera = value; }
         }
 
-        public List<IRenderable> Renderables { get; set; }
+        public void AddRenderable(IRenderable renderable)
+        {
+            this.renderables = this.renderables.Add(renderable);
+        }
+
+        public void RemoveRenderable(IRenderable renderable)
+        {
+            this.renderables = this.renderables.Remove(renderable);
+        }
+
+        public IReadOnlyCollection<IRenderable> Renderables { get { return renderables; } }
         public DirectionalLight Light { get; set; }
 
 #if TEXT_RENDERER
         public SimpleText TextRenderer { get; private set; }
 #endif
-        #endregion Public Accessors
+        #endregion Public Accessors And Methods
 
         #region Constructor
         public SimpleRenderer()
@@ -88,7 +100,7 @@ namespace EngineCore.Graphics
             string title = "SharpDX Renderer (SIMD " + (Vector.IsHardwareAccelerated ? "Enabled" : "Disabled") + ")";
             title += Environment.Is64BitProcess ? " 64-bit" : " 32-bit";
             this.renderForm = new RenderForm(title);
-            this.Renderables = new List<IRenderable>();
+            this.renderables = ImmutableArray<IRenderable>.Empty;
             CreateAndInitializeDevice();
             renderForm.Show();
             AmbientColor = new Color4f(.25f, .25f, .25f, 1);
@@ -231,7 +243,7 @@ namespace EngineCore.Graphics
 #if TEXT_RENDERER
             TextRenderer.BeginDraw();
 #endif
-            foreach (var renderable in new List<IRenderable>(Renderables))
+            foreach (var renderable in renderables)
             {
                 renderable.Render(this);
             }

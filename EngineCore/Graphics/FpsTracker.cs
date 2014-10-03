@@ -43,12 +43,12 @@ namespace EngineCore.Graphics
                 frameTimes.AddLast(this.stopwatch.ElapsedMilliseconds / 1000.0);
             }
 
-            system.Renderer.Renderables.Add(this);
+            system.Renderer.AddRenderable(this);
         }
 
         protected override void Uninitialize(SharpDxGraphicsSystem system)
         {
-            system.Renderer.Renderables.Remove(this);
+            system.Renderer.RemoveRenderable(this);
             
         }
 
@@ -63,16 +63,17 @@ namespace EngineCore.Graphics
         private void UpdateFrameCount()
         {
             var first = frameTimes.First.Value;
-            var second = frameTimes.ElementAt(1);
+            var second = frameTimes.First.Next.Value;
             var oldDiff = (second - first);
 
             var last = frameTimes.Last.Value;
             var now = this.stopwatch.ElapsedMilliseconds / 1000.0;
             var newDiff = (now - last);
 
+            var firstNode = frameTimes.First;
             frameTimes.RemoveFirst();
-            frameTimes.AddLast(now);
-
+            firstNode.Value = now;
+            frameTimes.AddLast(firstNode);
             totalFrameTime += (newDiff - oldDiff);
         }
 

@@ -97,12 +97,12 @@ namespace EngineCore.Entities
                 cubeVertices,
                 cubeIndices);
 
-            system.Renderer.Renderables.Add(this);
+            system.Renderer.AddRenderable(this);
         }
 
         protected override void Uninitialize(SharpDxGraphicsSystem system)
         {
-            system.Renderer.Renderables.Remove(this);
+            system.Renderer.RemoveRenderable(this);
             this.cubeMesh.Dispose();
             this.shader.Dispose();
         }

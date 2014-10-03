@@ -89,4 +89,38 @@ namespace EngineCore.Components
         protected abstract void Initialize(TSystem1 system1, TSystem2 system2);
         protected abstract void Uninitialize(TSystem1 system1, TSystem2 system2);
     }
+
+    public abstract class Component<TSystem1, TSystem2, TSystem3> : Component
+        where TSystem1 : GameSystem
+        where TSystem2 : GameSystem
+        where TSystem3 : GameSystem
+    {
+        internal override IEnumerable<Type> GetDependencies()
+        {
+            yield return typeof(TSystem1);
+            yield return typeof(TSystem2);
+            yield return typeof(TSystem3);
+        }
+
+        protected internal override void Initialize(IEnumerable<GameSystem> systems)
+        {
+            TSystem1 system1 = (TSystem1)systems.Single(gs => gs.GetType() == typeof(TSystem1));
+            TSystem2 system2 = (TSystem2)systems.Single(gs => gs.GetType() == typeof(TSystem2));
+            TSystem3 system3 = (TSystem3)systems.Single(gs => gs.GetType() == typeof(TSystem3));
+
+            this.Initialize(system1, system2, system3);
+        }
+
+        protected internal override void Uninitialize(IEnumerable<GameSystem> systems)
+        {
+            TSystem1 system1 = (TSystem1)systems.Single(gs => gs.GetType() == typeof(TSystem1));
+            TSystem2 system2 = (TSystem2)systems.Single(gs => gs.GetType() == typeof(TSystem2));
+            TSystem3 system3 = (TSystem3)systems.Single(gs => gs.GetType() == typeof(TSystem3));
+
+            this.Uninitialize(system1, system2, system3);
+        }
+
+        protected abstract void Initialize(TSystem1 system1, TSystem2 system2, TSystem3 system3);
+        protected abstract void Uninitialize(TSystem1 system1, TSystem2 system2, TSystem3 system3);
+    }
 }

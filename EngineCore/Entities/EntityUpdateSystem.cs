@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 
@@ -7,40 +8,33 @@ namespace EngineCore.Entities
 {
     public class EntityUpdateSystem : GameSystem
     {
-        List<IUpdateableEntity> entities = new List<IUpdateableEntity>();
+        ImmutableArray<IUpdateableEntity> entities = ImmutableArray<IUpdateableEntity>.Empty;
+        public IReadOnlyCollection<IUpdateableEntity> Entities
+        {
+            get { return entities; }
+        }
 
         public void AddEntity(IUpdateableEntity entity)
         {
-            this.entities.Add(entity);
+            this.entities = this.entities.Add(entity);
         }
 
-        public bool RemoveEntity(IUpdateableEntity entity)
+        public void RemoveEntity(IUpdateableEntity entity)
         {
-            return this.entities.Remove(entity);
+            this.entities = this.entities.Remove(entity);
         }
 
-        public EntityUpdateSystem(Game game)
-            : base(game)
-        {
-
-        }
+        public EntityUpdateSystem(Game game) : base(game) { }
 
         public override void Update()
         {
-            foreach (IUpdateableEntity entity in new List<IUpdateableEntity>(entities))
+            foreach (IUpdateableEntity entity in entities)
             {
                 entity.Update();
             }
         }
 
-        public override void Start()
-        {
-
-        }
-
-        public override void Stop()
-        {
-
-        }
+        public override void Start() { }
+        public override void Stop() { }
     }
 }

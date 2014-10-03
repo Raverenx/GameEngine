@@ -100,7 +100,7 @@ namespace EngineCore.Graphics
                     this.projectionMatrix = MathUtil.CreatePerspectiveFovLH(fieldOfViewRadians, windowRatio, 0.1f, 1000.0f);
                     break;
                 case ProjectionType.Orthographic:
-                    this.projectionMatrix = MathUtil.CreateOrthographic(10, 10, .03f, 1000f);
+                    this.projectionMatrix = MathUtil.CreateOrthographic(10 * windowRatio, 10, .03f, 1000f);
                     break;
             }
         }

@@ -4,6 +4,7 @@ using EngineCore.Input;
 using EngineCore.Physics;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -14,20 +15,20 @@ using System.Threading;
 
 namespace EngineCore
 {
-    public class Game
+    public abstract class Game
     {
         public GameSystemCollection Systems { get; set; }
-        private double desiredFrameLength = 1.0 / 60.0;
+        private double desiredFrameLength = 1.0 / 240.0;
         private bool running = false;
 
-        private List<GameObject> gameObjects = new List<GameObject>();
-        public IReadOnlyList<GameObject> GameObjects
+        private ImmutableArray<GameObject> gameObjects = ImmutableArray<GameObject>.Empty;
+        public IReadOnlyCollection<GameObject> GameObjects
         {
             get { return gameObjects; }
         }
         private void AddGameObject(GameObject go)
         {
-            this.gameObjects.Add(go);
+            this.gameObjects = this.gameObjects.Add(go);
             go.InitializeComponents(this);
         }
 
@@ -39,7 +40,6 @@ namespace EngineCore
 
         public Game()
         {
-            this.previousFrameStartTime = DateTime.UtcNow;
             this.Systems = new GameSystemCollection();
             this.Systems.Add(new EntityUpdateSystem(this));
             this.Systems.Add(new BepuPhysicsSystem(this));
@@ -47,7 +47,9 @@ namespace EngineCore
             this.Systems.Add(graphicsSystem);
             this.Systems.Add(new InputSystem(this));
 
-            GameObject.GameObjectConstructed += AddGameObject; // This is absolutely required
+            GameObject.GameObjectConstructed += AddGameObject;  // This is absolutely required
+
+            this.previousFrameStartTime = DateTime.UtcNow;
         }
 
         public void Start()
@@ -59,10 +61,7 @@ namespace EngineCore
             RunMainLoop();
         }
 
-        protected virtual void PerformCustomInitialization()
-        {
-            throw new NotImplementedException();
-        }
+        protected abstract void PerformCustomInitialization();
 
         private void StartSystems()
         {
@@ -130,9 +129,6 @@ namespace EngineCore
             this.running = false;
         }
 
-        internal IEnumerable<GameSystem> GetSystems(IEnumerable<Type> dependencyTypes)
-        {
-            return this.Systems.Where(gs => dependencyTypes.Contains(gs.GetType()));
-        }
+
     }
 }

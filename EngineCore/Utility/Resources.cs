@@ -8,7 +8,6 @@ namespace EngineCore.Utility
 {
     public static class Resources
     {
-
         public static string LightShaderPath { get { return "Shaders/LightShader.hlsl"; } }
     }
 }

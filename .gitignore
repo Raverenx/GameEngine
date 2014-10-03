@@ -213,3 +213,6 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+*.exe
+*.exe
+GameApplication/bin/x64/Debug/GameApplication.exe

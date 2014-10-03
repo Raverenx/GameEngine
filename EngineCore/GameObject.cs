@@ -43,7 +43,7 @@ namespace EngineCore
 
         public T GetComponent<T>() where T : Component
         {
-            return (T)components[typeof(T)].FirstOrDefault();
+            return (T)components[typeof(T)].First();
         }
 
         public T AddComponent<T>() where T : Component, new()
@@ -91,7 +91,7 @@ namespace EngineCore
             IEnumerable<Type> dependencyTypes = component.GetDependencies();
             if (dependencyTypes != null)
             {
-                systems = game.GetSystems(dependencyTypes);
+                systems = game.Systems.GetSystemsByTypes(dependencyTypes);
             }
             component.CoreInitialize(this, systems);
         }
@@ -102,7 +102,7 @@ namespace EngineCore
             IEnumerable<Type> dependencyTypes = component.GetDependencies();
             if (dependencyTypes != null)
             {
-                systems = game.GetSystems(dependencyTypes);
+                systems = game.Systems.GetSystemsByTypes(dependencyTypes);
             }
             component.Uninitialize(systems);
         }
