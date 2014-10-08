@@ -41,7 +41,7 @@ namespace EngineCore.Behaviours
                 currentPitch += yDelta * 0.01f;
 
                 this.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(currentYaw, currentPitch, 0f);
-                this.cc.BepuController.ViewDirection = this.Transform.Forward.ToBepuVector();
+                this.cc.BepuController.ViewDirection = this.Transform.Forward;
             }
 
             this.previousMouseX = newMouseX;

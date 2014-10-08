@@ -111,8 +111,8 @@ namespace EngineCore.Components
 
         internal void OnPhysicsUpdate(BEPUphysics.Entities.Entity obj)
         {
-            this.position = obj.Position.ToSimdVector();
-            this.rotation = obj.Orientation.ToSimdQuaternion();
+            this.position = obj.Position;
+            this.rotation = obj.Orientation;
         }
 
         protected internal override void Initialize(IEnumerable<GameSystem> systems) { }

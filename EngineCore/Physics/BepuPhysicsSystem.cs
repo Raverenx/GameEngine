@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 
 namespace EngineCore.Physics
@@ -43,7 +44,7 @@ namespace EngineCore.Physics
 
         public override void Start()
         {
-            space.ForceUpdater.Gravity = new BEPUutilities.Vector3(0f, -9.81f, 0f);
+            space.ForceUpdater.Gravity = new Vector3(0f, -9.81f, 0f);
         }
 
         public override void Stop()

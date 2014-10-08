@@ -11,7 +11,7 @@ namespace EngineCore.Physics
 {
     public class BoxCollider : Component<BepuPhysicsSystem>
     {
-        Box physicsBox = new Box(BEPUutilities.Vector3.Zero, 1.0f, 1.0f, 1.0f, 1.0f);
+        Box physicsBox = new Box(System.Numerics.Vector3.Zero, 1.0f, 1.0f, 1.0f, 1.0f);
 
         public Entity PhysicsEntity
         {
@@ -100,12 +100,12 @@ namespace EngineCore.Physics
 
         private void OnTransformPositionManuallyChanged(System.Numerics.Vector3 position)
         {
-            this.physicsBox.Position = position.ToBepuVector();
+            this.physicsBox.Position = position;
         }
 
         private void OnTransformRotationManuallyChanged(System.Numerics.Quaternion rotation)
         {
-            this.physicsBox.Orientation = rotation.ToBepuQuaternion();
+            this.physicsBox.Orientation = rotation;
         }
     }
 }

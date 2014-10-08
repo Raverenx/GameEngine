@@ -92,11 +92,11 @@ namespace GameApplication
 
                 box = GameObject.CreateBox(1.0f, 1.0f, 1.0f);
                 box.Transform.Position = new Vector3(4, 5, -10);
-                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = new Vector3(0, 2, 15).ToBepuVector();
+                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = new Vector3(0, 2, 15);
 
                 box = GameObject.CreateBox(1.0f, 1.0f, 1.0f);
                 box.Transform.Position = new Vector3(4.9f, 5, 30);
-                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = new Vector3(0, 2, -15).ToBepuVector();
+                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = new Vector3(0, 2, -15);
 
                 var floor = GameObject.CreateStaticBox(50.0f, 1.0f, 50.0f);
                 var wall1 = GameObject.CreateStaticBox(50.0f, 11.0f, 0.5f);

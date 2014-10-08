@@ -60,12 +60,12 @@ namespace EngineCore.Physics
 
         private void OnTransformPositionManuallyChanged(System.Numerics.Vector3 position)
         {
-            this.physicsEntity.Position = position.ToBepuVector();
+            this.physicsEntity.Position = position;
         }
 
         private void OnTransformRotationManuallyChanged(System.Numerics.Quaternion rotation)
         {
-            this.physicsEntity.Orientation = rotation.ToBepuQuaternion();
+            this.physicsEntity.Orientation = rotation;
         }
     }
 }

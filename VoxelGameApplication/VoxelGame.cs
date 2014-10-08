@@ -1,7 +1,6 @@
 ﻿using EngineCore;
 using EngineCore.Graphics;
 using EngineCore.Input;
-using LibNoise;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -48,7 +47,6 @@ namespace VoxelGameApplication
     {
         public Chunk GenerateChunk(float threshold)
         {
-            Perlin perlin = new Perlin();
             Chunk chunk = new Chunk();
             for (int x = 0; x < Chunk.ChunkWidth; x++)
             {
@@ -56,8 +54,7 @@ namespace VoxelGameApplication
                 {
                     for (int z = 0; z < Chunk.ChunkDepth; z++)
                     {
-                        //float density = SimplexNoise.GenerateSingleNoiseValue(3* x, 2 * y -.1f, 3* z +.4f);
-                        float density = (float)perlin.GetValue(x / 10.0, y / 100.0, z / 100.0);
+                        float density = SimplexNoise.GenerateSingleNoiseValue(3* x, 2 * y -.1f, 3* z +.4f);
                         Debug.WriteLine(density);
                         chunk.DataBuffer[x + y * Chunk.ChunkWidth + z * Chunk.ChunkHeight * Chunk.ChunkDepth]
                             = new ChunkPointData(density > .2f ? BlockType.Stone : BlockType.Air);

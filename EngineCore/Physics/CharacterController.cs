@@ -22,7 +22,7 @@ namespace EngineCore.Physics
         }
         public void SetMotionDirection(Vector2 motion)
         {
-            bepuController.HorizontalMotionConstraint.MovementDirection = motion.ToBepuVector();
+            bepuController.HorizontalMotionConstraint.MovementDirection = motion;
         }
 
         protected override void Uninitialize(BepuPhysicsSystem system)
