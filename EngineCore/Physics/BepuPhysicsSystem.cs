@@ -19,7 +19,7 @@ namespace EngineCore.Physics
             : base(game)
         {
             this.looper = new BEPUutilities.Threading.ParallelLooper();
-            for (int g = 0; g < Environment.ProcessorCount; g++)
+            for (int g = 0; g < Environment.ProcessorCount - 1; g++)
             {
                 this.looper.AddThread();
             }

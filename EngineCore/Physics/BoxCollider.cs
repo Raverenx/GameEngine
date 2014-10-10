@@ -9,17 +9,9 @@ using System.Threading.Tasks;
 
 namespace EngineCore.Physics
 {
-    public class BoxCollider : Component<BepuPhysicsSystem>
+    public class BoxCollider : Collider<Box>
     {
-        Box physicsBox = new Box(System.Numerics.Vector3.Zero, 1.0f, 1.0f, 1.0f, 1.0f);
-
-        public Entity PhysicsEntity
-        {
-            get { return physicsBox; }
-        }
-
         private float width, height, length = 1.0f;
-        private float mass = 1.0f;
 
         public float Width
         {
@@ -51,61 +43,21 @@ namespace EngineCore.Physics
             }
         }
 
-        public float Mass
-        {
-            get { return mass; }
-            set
-            {
-                mass = value;
-                physicsBox.Mass = mass;
-            }
-        }
-
         private void SetPhysicsBoxDimensions()
         {
-            physicsBox.Length = length * Transform.Scale.Z;
-            physicsBox.Width = width * Transform.Scale.X;
-            physicsBox.Height = height * Transform.Scale.Y;
+            PhysicsEntity.Length = length * Transform.Scale.Z;
+            PhysicsEntity.Width = width * Transform.Scale.X;
+            PhysicsEntity.Height = height * Transform.Scale.Y;
         }
 
-        protected override void Initialize(BepuPhysicsSystem system)
+        protected override Box InitPhysicsEntity()
         {
-            this.Transform.PositionChanged += OnTransformPositionManuallyChanged;
-            this.Transform.RotationChanged += OnTransformRotationManuallyChanged;
-
-            physicsBox.PositionUpdated += Transform.OnPhysicsUpdate;
-            system.AddOject(this.physicsBox, this.GameObject);
-            OnTransformPositionManuallyChanged(this.Transform.Position);
-            OnTransformRotationManuallyChanged(this.Transform.Rotation);
-            OnScaleChanged(this.Transform.Scale);
-
-            this.Transform.ScaleChanged += OnScaleChanged;
+            return new Box(this.Transform.Position, width, height, length);
         }
 
-        protected override void Uninitialize(BepuPhysicsSystem system)
-        {
-            this.Transform.PositionChanged -= OnTransformPositionManuallyChanged;
-            this.Transform.RotationChanged -= OnTransformRotationManuallyChanged;
-
-            physicsBox.PositionUpdated -= Transform.OnPhysicsUpdate;
-
-            system.RemoveObject(this.physicsBox);
-            this.Transform.ScaleChanged -= OnScaleChanged;
-        }
-
-        private void OnScaleChanged(System.Numerics.Vector3 obj)
+        protected override void OnTransformScaleManuallyChanged(System.Numerics.Vector3 obj)
         {
             SetPhysicsBoxDimensions();
-        }
-
-        private void OnTransformPositionManuallyChanged(System.Numerics.Vector3 position)
-        {
-            this.physicsBox.Position = position;
-        }
-
-        private void OnTransformRotationManuallyChanged(System.Numerics.Quaternion rotation)
-        {
-            this.physicsBox.Orientation = rotation;
         }
     }
 }

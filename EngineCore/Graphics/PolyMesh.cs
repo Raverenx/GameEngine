@@ -13,6 +13,18 @@ namespace EngineCore.Graphics
 {
     public class PolyMesh : IDisposable
     {
+        private IList<System.Numerics.Vector3> vertices;
+        private IList<int> indices;
+
+        /// <summary>
+        /// Returns the list of positions of this mesh's vertices.
+        /// </summary>
+        public IList<System.Numerics.Vector3> Vertices { get { return this.vertices; } }
+        /// <summary>
+        /// Returns the list of indices of this mesh.
+        /// </summary>
+        public IList<int> Indices { get { return this.indices; } }
+
         /// <summary>
         /// The vertex buffer of the mesh
         /// </summary>
@@ -29,6 +41,9 @@ namespace EngineCore.Graphics
         private int indexCount;
         public PolyMesh(Device device, SimpleVertex[] vertices, int[] indices)
         {
+            this.vertices = vertices.Select(sv => sv.Position).ToList();
+            this.indices = indices;
+
             this.device = device;
             this.VertexBuffer = SharpDX.Direct3D11.Buffer.Create<SimpleVertex>(device, BindFlags.VertexBuffer, vertices);
             this.IndexBuffer = SharpDX.Direct3D11.Buffer.Create<int>(device, BindFlags.IndexBuffer, indices);

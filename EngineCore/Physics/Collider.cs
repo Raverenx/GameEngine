@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace EngineCore.Physics
 {
-    public class Collider : Component<BepuPhysicsSystem>
+    public abstract class Collider<T> : Component<BepuPhysicsSystem> where T : Entity
     {
-        private Entity physicsEntity;
         private BepuPhysicsSystem system;
+        private T physicsEntity;
 
-        public Entity PhysicsEntity
+        public T PhysicsEntity
         {
             get { return physicsEntity; }
             set
@@ -33,10 +33,19 @@ namespace EngineCore.Physics
             }
         }
 
+        public float Mass
+        {
+            get { return physicsEntity.Mass; }
+            set { physicsEntity.Mass = value; }
+        }
+
         protected override void Initialize(BepuPhysicsSystem system)
         {
+            this.PhysicsEntity = InitPhysicsEntity();
+
             this.Transform.PositionChanged += OnTransformPositionManuallyChanged;
             this.Transform.RotationChanged += OnTransformRotationManuallyChanged;
+            this.Transform.ScaleChanged += OnTransformScaleManuallyChanged;
 
             this.system = system;
             if (this.physicsEntity != null)
@@ -46,6 +55,8 @@ namespace EngineCore.Physics
                 OnTransformRotationManuallyChanged(this.Transform.Rotation);
             }
         }
+
+        protected abstract T InitPhysicsEntity();
 
         protected override void Uninitialize(BepuPhysicsSystem system)
         {
@@ -58,14 +69,18 @@ namespace EngineCore.Physics
             }
         }
 
-        private void OnTransformPositionManuallyChanged(System.Numerics.Vector3 position)
+        protected virtual void OnTransformPositionManuallyChanged(System.Numerics.Vector3 position)
         {
             this.physicsEntity.Position = position;
         }
 
-        private void OnTransformRotationManuallyChanged(System.Numerics.Quaternion rotation)
+        protected virtual void OnTransformRotationManuallyChanged(System.Numerics.Quaternion rotation)
         {
             this.physicsEntity.Orientation = rotation;
+        }
+
+        protected virtual void OnTransformScaleManuallyChanged(System.Numerics.Vector3 obj)
+        {
         }
     }
 }

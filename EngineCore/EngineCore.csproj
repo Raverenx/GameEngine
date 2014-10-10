@@ -141,6 +141,8 @@
     <Compile Include="Physics\BoxCollider.cs" />
     <Compile Include="Physics\CharacterController.cs" />
     <Compile Include="Physics\Collider.cs" />
+    <Compile Include="Physics\ConvexHullCollider.cs" />
+    <Compile Include="Physics\SphereCollider.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utility\Convert.cs" />
     <Compile Include="Entities\BoxRenderer.cs" />

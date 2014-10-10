@@ -55,9 +55,9 @@ namespace GameApplication
             private void AddStartingStuff()
             {
                 this.GraphicsSystem.Renderer.Light = new DirectionalLight(
-                    GraphicsSystem.Renderer.Device, 
-                    GraphicsSystem.Renderer.DeviceContext, 
-                    new Vector3(.25f, -1f, 0f), 
+                    GraphicsSystem.Renderer.Device,
+                    GraphicsSystem.Renderer.DeviceContext,
+                    new Vector3(.25f, -1f, 0f),
                     new Color4f(1, 1, 1, 1));
 
                 var lightRotationObject = new GameObject();
