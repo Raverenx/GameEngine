@@ -79,12 +79,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BEPUphysics">
-      <HintPath>refs\BEPU\BEPUphysics.dll</HintPath>
-    </Reference>
-    <Reference Include="BEPUutilities">
-      <HintPath>refs\BEPU\BEPUutilities.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Experimental.Collections">
       <HintPath>..\packages\Microsoft.Experimental.Collections.1.0.1-alpha\lib\portable-net45+win8+wp8\Microsoft.Experimental.Collections.dll</HintPath>
     </Reference>
@@ -182,6 +176,16 @@
     <Content Include="Shaders\LightShader.hlsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BEPU\BEPUphysics\BEPUphysics.csproj">
+      <Project>{c0d52c9f-14b8-4008-8ddc-109c27561a5c}</Project>
+      <Name>BEPUphysics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BEPU\BEPUutilities\BEPUutilities.csproj">
+      <Project>{34853dea-43a6-4f2f-a379-d1ee04d256d2}</Project>
+      <Name>BEPUutilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

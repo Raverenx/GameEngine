@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EngineCore.Physics
 {
-    public class ConvexHullCollider : Collider<BEPUphysics.Entities.Prefabs.ConvexHull>
+    public class ConvexHullCollider : Collider<ConvexHull>
     {
         private PolyMesh mesh;
 

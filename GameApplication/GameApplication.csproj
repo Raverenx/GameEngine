@@ -79,14 +79,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BEPUphysics, Version=1.4.0.0, Culture=neutral, PublicKeyToken=31f6a8732a21de19, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\EngineCore\refs\BEPU\BEPUphysics.dll</HintPath>
-    </Reference>
-    <Reference Include="BEPUutilities, Version=1.4.0.0, Culture=neutral, PublicKeyToken=31f6a8732a21de19, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\EngineCore\refs\BEPU\BEPUutilities.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDX, Version=2.5.0.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\EngineCore\refs\SharpDX\SharpDX.dll</HintPath>
@@ -120,8 +112,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Numerics.Vectors, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System.Numerics.Vectors">
       <HintPath>..\EngineCore\refs\System.Numerics.Vectors\System.Numerics.Vectors.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
@@ -165,6 +156,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BEPU\BEPUphysics\BEPUphysics.csproj">
+      <Project>{c0d52c9f-14b8-4008-8ddc-109c27561a5c}</Project>
+      <Name>BEPUphysics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BEPU\BEPUutilities\BEPUutilities.csproj">
+      <Project>{34853dea-43a6-4f2f-a379-d1ee04d256d2}</Project>
+      <Name>BEPUutilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EngineCore\EngineCore.csproj">
       <Project>{c29c63ab-7cfb-4eaa-be26-9f225fb9e007}</Project>
       <Name>EngineCore</Name>
