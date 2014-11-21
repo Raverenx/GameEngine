@@ -70,7 +70,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE;USE_SLEEP0;TEXT_RENDERER</DefineConstants>
+    <DefineConstants>TRACE;USE_SLEEP0;TEXT_RENDERER;MONITOR_SLOWRUNNING</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>

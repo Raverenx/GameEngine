@@ -18,7 +18,7 @@ namespace EngineCore
     public abstract class Game
     {
         public GameSystemCollection Systems { get; set; }
-        private double desiredFrameLength = 1.0 / 240.0;
+        private double desiredFrameLength = 1.0 / 60.0;
         private bool running = false;
 
         private ImmutableArray<GameObject> gameObjects = ImmutableArray<GameObject>.Empty;

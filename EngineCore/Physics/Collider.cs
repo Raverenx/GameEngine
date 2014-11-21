@@ -41,19 +41,16 @@ namespace EngineCore.Physics
 
         protected override void Initialize(BepuPhysicsSystem system)
         {
-            this.PhysicsEntity = InitPhysicsEntity();
 
             this.Transform.PositionChanged += OnTransformPositionManuallyChanged;
             this.Transform.RotationChanged += OnTransformRotationManuallyChanged;
             this.Transform.ScaleChanged += OnTransformScaleManuallyChanged;
 
             this.system = system;
-            if (this.physicsEntity != null)
-            {
-                system.AddOject(this.physicsEntity, this.GameObject);
-                OnTransformPositionManuallyChanged(this.Transform.Position);
-                OnTransformRotationManuallyChanged(this.Transform.Rotation);
-            }
+            this.PhysicsEntity = InitPhysicsEntity();
+
+            OnTransformPositionManuallyChanged(this.Transform.Position);
+            OnTransformRotationManuallyChanged(this.Transform.Rotation);
         }
 
         protected abstract T InitPhysicsEntity();

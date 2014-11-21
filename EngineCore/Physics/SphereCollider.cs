@@ -11,7 +11,14 @@ namespace EngineCore.Physics
 {
     public class SphereCollider : Collider<Sphere>
     {
-        private float radius = 1.0f;
+        private float radius;
+
+        public SphereCollider() : this(1.0f) { }
+
+        public SphereCollider(float radius)
+        {
+            this.radius = radius;
+        }
 
         public float Radius
         {

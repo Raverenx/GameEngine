@@ -10,16 +10,20 @@ namespace EngineCore.Physics
 {
     public class CharacterController : Component<BepuPhysicsSystem>
     {
-        private BEPUphysics.Character.CharacterController bepuController = new BEPUphysics.Character.CharacterController(jumpSpeed: 7.5f, mass: 1.0f);
+        private BEPUphysics.Character.CharacterController bepuController
+            = new BEPUphysics.Character.CharacterController(jumpSpeed: 7.5f, mass: 1.0f);
+
         public BEPUphysics.Character.CharacterController BepuController
         {
             get { return bepuController; }
         }
+
         protected override void Initialize(BepuPhysicsSystem system)
         {
             system.AddOject(bepuController, this.GameObject);
             bepuController.Body.PositionUpdated += Transform.OnPhysicsUpdate;
         }
+
         public void SetMotionDirection(Vector2 motion)
         {
             bepuController.HorizontalMotionConstraint.MovementDirection = motion;

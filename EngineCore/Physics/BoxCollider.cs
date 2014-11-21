@@ -11,7 +11,16 @@ namespace EngineCore.Physics
 {
     public class BoxCollider : Collider<Box>
     {
-        private float width, height, length = 1.0f;
+        private float width, height, length;
+
+        public BoxCollider() : this(1.0f, 1.0f, 1.0f) { }
+
+        public BoxCollider(float width, float height, float length)
+        {
+            this.width = width;
+            this.height = height;
+            this.length = length;
+        }
 
         public float Width
         {

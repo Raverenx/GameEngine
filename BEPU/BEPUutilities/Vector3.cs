@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace BEPUutilities
 {
@@ -7,12 +8,10 @@ namespace BEPUutilities
     /// </summary>
     public static class Vector3Ex
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Normalize(this System.Numerics.Vector3 vec)
         {
-            float length = vec.Length();
-            vec.X /= length;
-            vec.Y /= length;
-            vec.Z /= length;
+            System.Numerics.Vector3.Normalize(vec);
         }
 
         /// <summary>
@@ -21,9 +20,10 @@ namespace BEPUutilities
         /// <param name="a">First vector in the product.</param>
         /// <param name="b">Second vector in the product.</param>
         /// <returns>Resulting dot product.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Dot(System.Numerics.Vector3 a, System.Numerics.Vector3 b)
         {
-            return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
+            return System.Numerics.Vector3.Dot(a, b);
         }
 
         /// <summary>
@@ -32,9 +32,10 @@ namespace BEPUutilities
         /// <param name="a">First vector in the product.</param>
         /// <param name="b">Second vector in the product.</param>
         /// <param name="product">Resulting dot product.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Dot(ref System.Numerics.Vector3 a, ref System.Numerics.Vector3 b, out float product)
         {
-            product = a.X * b.X + a.Y * b.Y + a.Z * b.Z;
+            product = System.Numerics.Vector3.Dot(a, b);
         }
         /// <summary>
         /// Adds two vectors together.
@@ -42,6 +43,7 @@ namespace BEPUutilities
         /// <param name="a">First vector to add.</param>
         /// <param name="b">Second vector to add.</param>
         /// <param name="sum">Sum of the two vectors.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Add(ref System.Numerics.Vector3 a, ref System.Numerics.Vector3 b, out System.Numerics.Vector3 sum)
         {
             sum.X = a.X + b.X;
@@ -54,6 +56,7 @@ namespace BEPUutilities
         /// <param name="a">Vector to subtract from.</param>
         /// <param name="b">Vector to subtract from the first vector.</param>
         /// <param name="difference">Result of the subtraction.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Subtract(ref System.Numerics.Vector3 a, ref System.Numerics.Vector3 b, out System.Numerics.Vector3 difference)
         {
             difference.X = a.X - b.X;
@@ -66,6 +69,7 @@ namespace BEPUutilities
         /// <param name="v">Vector to scale.</param>
         /// <param name="scale">Amount to scale.</param>
         /// <param name="result">Scaled vector.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Multiply(ref System.Numerics.Vector3 v, float scale, out System.Numerics.Vector3 result)
         {
             result.X = v.X * scale;
@@ -78,6 +82,7 @@ namespace BEPUutilities
         /// <param name="v">Vector to divide.</param>
         /// <param name="divisor">Value to divide the vector's components.</param>
         /// <param name="result">Result of the division.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Divide(ref System.Numerics.Vector3 v, float divisor, out System.Numerics.Vector3 result)
         {
             float inverse = 1 / divisor;
@@ -85,13 +90,14 @@ namespace BEPUutilities
             result.Y = v.Y * inverse;
             result.Z = v.Z * inverse;
         }
-        
+
         /// <summary>
         /// Computes the squared distance between two vectors.
         /// </summary>
         /// <param name="a">First vector.</param>
         /// <param name="b">Second vector.</param>
         /// <param name="distanceSquared">Squared distance between the two vectors.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DistanceSquared(ref System.Numerics.Vector3 a, ref System.Numerics.Vector3 b, out float distanceSquared)
         {
             float x = a.X - b.X;
@@ -106,6 +112,7 @@ namespace BEPUutilities
         /// <param name="a">First vector.</param>
         /// <param name="b">Second vector.</param>
         /// <returns>Squared distance between the two vectors.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float DistanceSquared(System.Numerics.Vector3 a, System.Numerics.Vector3 b)
         {
             float x = a.X - b.X;
@@ -121,6 +128,7 @@ namespace BEPUutilities
         /// <param name="a">First vector.</param>
         /// <param name="b">Second vector.</param>
         /// <param name="distance">Distance between the two vectors.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Distance(ref System.Numerics.Vector3 a, ref System.Numerics.Vector3 b, out float distance)
         {
             float x = a.X - b.X;
@@ -134,6 +142,7 @@ namespace BEPUutilities
         /// <param name="a">First vector.</param>
         /// <param name="b">Second vector.</param>
         /// <returns>Distance between the two vectors.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Distance(System.Numerics.Vector3 a, System.Numerics.Vector3 b)
         {
             float toReturn;
@@ -141,16 +150,6 @@ namespace BEPUutilities
             return toReturn;
         }
 
-        /// <summary>
-        /// Gets the zero vector.
-        /// </summary>
-        public static System.Numerics.Vector3 Zero
-        {
-            get
-            {
-                return new System.Numerics.Vector3();
-            }
-        }
 
         /// <summary>
         /// Gets the up vector (0,1,0).
@@ -249,30 +248,6 @@ namespace BEPUutilities
         }
 
         ///// <summary>
-        ///// Gets a vector pointing along the X axis.
-        ///// </summary>
-        //public static System.Numerics.Vector3 UnitX
-        //{
-        //    get { return new System.Numerics.Vector3 { X = 1 }; }
-        //}
-
-        ///// <summary>
-        ///// Gets a vector pointing along the Y axis.
-        ///// </summary>
-        //public static System.Numerics.Vector3 UnitY
-        //{
-        //    get { return new System.Numerics.Vector3 { Y = 1 }; }
-        //}
-
-        ///// <summary>
-        ///// Gets a vector pointing along the Z axis.
-        ///// </summary>
-        //public static System.Numerics.Vector3 UnitZ
-        //{
-        //    get { return new System.Numerics.Vector3 { Z = 1 }; }
-        //}
-
-        ///// <summary>
         ///// Computes the cross product between two vectors.
         ///// </summary>
         ///// <param name="a">First vector.</param>
@@ -290,6 +265,7 @@ namespace BEPUutilities
         /// <param name="a">First vector.</param>
         /// <param name="b">Second vector.</param>
         /// <param name="result">Cross product of the two vectors.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Cross(ref System.Numerics.Vector3 a, ref System.Numerics.Vector3 b, out System.Numerics.Vector3 result)
         {
             float resultX = a.Y * b.Z - a.Z * b.Y;
@@ -317,12 +293,10 @@ namespace BEPUutilities
         /// </summary>
         /// <param name="v">Vector to normalize.</param>
         /// <param name="result">Normalized vector.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Normalize(ref System.Numerics.Vector3 v, out System.Numerics.Vector3 result)
         {
-            float inverse = (float)(1 / System.Math.Sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z));
-            result.X = v.X * inverse;
-            result.Y = v.Y * inverse;
-            result.Z = v.Z * inverse;
+            result = System.Numerics.Vector3.Normalize(v);
         }
 
         /// <summary>
@@ -330,11 +304,10 @@ namespace BEPUutilities
         /// </summary>
         /// <param name="v">Vector to negate.</param>
         /// <param name="negated">Negated vector.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Negate(ref System.Numerics.Vector3 v, out System.Numerics.Vector3 negated)
         {
-            negated.X = -v.X;
-            negated.Y = -v.Y;
-            negated.Z = -v.Z;
+            negated = System.Numerics.Vector3.Negate(v);
         }
 
         /// <summary>
@@ -342,20 +315,10 @@ namespace BEPUutilities
         /// </summary>
         /// <param name="v">Vector to take the absolute value of.</param>
         /// <param name="result">Vector with nonnegative elements.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Abs(ref System.Numerics.Vector3 v, out System.Numerics.Vector3 result)
         {
-            if (v.X < 0)
-                result.X = -v.X;
-            else
-                result.X = v.X;
-            if (v.Y < 0)
-                result.Y = -v.Y;
-            else
-                result.Y = v.Y;
-            if (v.Z < 0)
-                result.Z = -v.Z;
-            else
-                result.Z = v.Z;
+            result = System.Numerics.Vector3.Abs(v);
         }
 
         ///// <summary>
@@ -376,11 +339,10 @@ namespace BEPUutilities
         /// <param name="a">First input vector to compare values from.</param>
         /// <param name="b">Second input vector to compare values from.</param>
         /// <param name="min">Vector containing the lesser values of each vector.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Min(ref System.Numerics.Vector3 a, ref System.Numerics.Vector3 b, out System.Numerics.Vector3 min)
         {
-            min.X = a.X < b.X ? a.X : b.X;
-            min.Y = a.Y < b.Y ? a.Y : b.Y;
-            min.Z = a.Z < b.Z ? a.Z : b.Z;
+            min = System.Numerics.Vector3.Min(a, b);
         }
 
         /// <summary>
@@ -389,11 +351,10 @@ namespace BEPUutilities
         /// <param name="a">First input vector to compare values from.</param>
         /// <param name="b">Second input vector to compare values from.</param>
         /// <returns>Vector containing the lesser values of each vector.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static System.Numerics.Vector3 Min(System.Numerics.Vector3 a, System.Numerics.Vector3 b)
         {
-            System.Numerics.Vector3 result;
-            Min(ref a, ref b, out result);
-            return result;
+            return System.Numerics.Vector3.Min(a, b);
         }
 
 
@@ -403,11 +364,10 @@ namespace BEPUutilities
         /// <param name="a">First input vector to compare values from.</param>
         /// <param name="b">Second input vector to compare values from.</param>
         /// <param name="max">Vector containing the greater values of each vector.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Max(ref System.Numerics.Vector3 a, ref System.Numerics.Vector3 b, out System.Numerics.Vector3 max)
         {
-            max.X = a.X > b.X ? a.X : b.X;
-            max.Y = a.Y > b.Y ? a.Y : b.Y;
-            max.Z = a.Z > b.Z ? a.Z : b.Z;
+            max = System.Numerics.Vector3.Max(a, b);
         }
 
         /// <summary>
@@ -416,11 +376,10 @@ namespace BEPUutilities
         /// <param name="a">First input vector to compare values from.</param>
         /// <param name="b">Second input vector to compare values from.</param>
         /// <returns>Vector containing the greater values of each vector.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static System.Numerics.Vector3 Max(System.Numerics.Vector3 a, System.Numerics.Vector3 b)
         {
-            System.Numerics.Vector3 result;
-            Max(ref a, ref b, out result);
-            return result;
+            return System.Numerics.Vector3.Max(a, b);
         }
 
         /// <summary>
@@ -430,6 +389,7 @@ namespace BEPUutilities
         /// <param name="end">Ending location of the interpolation.</param>
         /// <param name="interpolationAmount">Amount of the end location to use.</param>
         /// <returns>Interpolated intermediate state.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static System.Numerics.Vector3 Lerp(System.Numerics.Vector3 start, System.Numerics.Vector3 end, float interpolationAmount)
         {
             System.Numerics.Vector3 toReturn;
@@ -443,6 +403,7 @@ namespace BEPUutilities
         /// <param name="end">Ending location of the interpolation.</param>
         /// <param name="interpolationAmount">Amount of the end location to use.</param>
         /// <param name="result">Interpolated intermediate state.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Lerp(ref System.Numerics.Vector3 start, ref System.Numerics.Vector3 end, float interpolationAmount, out System.Numerics.Vector3 result)
         {
             float startAmount = 1 - interpolationAmount;
@@ -460,6 +421,7 @@ namespace BEPUutilities
         /// <param name="tangent2">Tangent associated with the second position.</param>
         /// <param name="interpolationAmount">Amount of the second point to use.</param>
         /// <param name="result">Interpolated intermediate state.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Hermite(ref System.Numerics.Vector3 value1, ref System.Numerics.Vector3 tangent1, ref System.Numerics.Vector3 value2, ref System.Numerics.Vector3 tangent2, float interpolationAmount, out System.Numerics.Vector3 result)
         {
             float weightSquared = interpolationAmount * interpolationAmount;
@@ -481,6 +443,7 @@ namespace BEPUutilities
         /// <param name="tangent2">Tangent associated with the second position.</param>
         /// <param name="interpolationAmount">Amount of the second point to use.</param>
         /// <returns>Interpolated intermediate state.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static System.Numerics.Vector3 Hermite(System.Numerics.Vector3 value1, System.Numerics.Vector3 tangent1, System.Numerics.Vector3 value2, System.Numerics.Vector3 tangent2, float interpolationAmount)
         {
             System.Numerics.Vector3 toReturn;

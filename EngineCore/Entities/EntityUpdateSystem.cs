@@ -9,7 +9,7 @@ namespace EngineCore.Entities
     public class EntityUpdateSystem : GameSystem
     {
         ImmutableArray<IUpdateableEntity> entities = ImmutableArray<IUpdateableEntity>.Empty;
-        public IReadOnlyCollection<IUpdateableEntity> Entities
+        public ImmutableArray<IUpdateableEntity> Entities
         {
             get { return entities; }
         }
